@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from core.authentication.views import LoginAuthView, SignupView
 
@@ -6,4 +6,5 @@ app_name = 'authentication'
 urlpatterns = [
     path('', LoginAuthView.as_view(), name='login'),
     path('signup/', SignupView.as_view(), name='signup'),
+    path('api/', include('core.authentication.api.urls'))
 ]
