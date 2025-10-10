@@ -90,7 +90,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database
+# Database configuration using environment variables for PostgreSQL
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 # DATABASES = {
