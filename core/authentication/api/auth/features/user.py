@@ -7,7 +7,7 @@ class AuthApiUser:
     def __init__(self, request):
         self.request = request
 
-    def __get_or_create_user(selfself, data):
+    def __get_or_create_user(self, data):
         data_user = dict()
         data_user['dni'] = data['dni']
         data_user['first_name'] = data['first_name']
@@ -21,15 +21,12 @@ class AuthApiUser:
         return user
 
     def login(self, user_data):
-        try:
-            if not User.objects.filter(dni=user_data['dni']).exists():
-                user = self.__get_or_create_user(user_data)
-            else:
-                user = User.objects.get(dni=user_data['dni'])
+        if not User.objects.filter(dni=user_data['dni']).exists():
+            user = self.__get_or_create_user(user_data)
+        else:
+            user = User.objects.get(dni=user_data['dni'])
 
-            token, _ = Token.objects.get_or_create(user=user)
-            return {'user': user, 'token': token.key}
+        token, _ = Token.objects.get_or_create(user=user)
+        return {'user': user, 'token': token.key}
 
-        except Exception as e:
-            raise Exception(e)
 

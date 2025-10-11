@@ -26,4 +26,4 @@ class CustomAuthTokenApiView(APIView):
                     return Response({'token': token}, status.HTTP_200_OK)
         except Exception as e:
             logger.error(str(e))
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'detail': 'Internal server error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
