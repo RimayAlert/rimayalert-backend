@@ -4,9 +4,8 @@ on:
     branches:
       - main
       - develop
-      - 'feature/**'
   pull_request:
-    branches: [ main, develop, 'feature/**' ]
+    branches: [ main, develop]
     types: [ opened, synchronize, reopened ]
 
 jobs:
