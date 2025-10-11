@@ -11,7 +11,8 @@ class TestAuthApiUser(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.login_url = reverse('auth_login')
+        # self.login_url = reverse('authentication:api_login')
+        self.login_url = '/api/auth/login'
         self.user_data = {
             "dni": "1723456789",
             "first_name": "Juan",
