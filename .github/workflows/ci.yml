@@ -7,7 +7,7 @@ on:
     types: [ opened, synchronize, reopened ]
 
 env:
-  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/codecrafters
+  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
 
 
 jobs:
