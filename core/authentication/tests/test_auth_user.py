@@ -1,3 +1,5 @@
+import secrets
+
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -13,13 +15,14 @@ class TestAuthApiUser(TestCase):
         self.client = APIClient()
         # self.login_url = reverse('authentication:api_login')
         self.login_url = '/api/auth/login'
+        pwd = secrets.token_urlsafe(32)
         self.user_data = {
             "dni": "1723456789",
             "first_name": "Juan",
             "last_name": "Vásquez",
             "email": "juan@example.com",
             "username": "juan_victores",
-            "password": "12345678"
+            "password": pwd,
         }
 
 
