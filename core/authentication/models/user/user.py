@@ -44,7 +44,26 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_full_name(self):
         return f'{self.first_name.upper()} {self.last_name.upper()}'
 
+    @classmethod
+    def get_or_create_user(cls, data_user):
+        try:
+            user, created = cls.objects.get_or_create(
+                dni=data_user['dni'],
+                defaults={
+                    'first_name': data_user.get('first_name', ''),
+                    'last_name': data_user.get('last_name', ''),
+                    'username': data_user.get('username', data_user['dni']),
+                    'email': data_user.get('email', ''),
+                    'is_active': True,
+                }
+            )
+            return user
+        except Exception as e:
+            raise Exception(f'Error creating or getting user: {e}')
+
     class Meta:
         verbose_name = 'Usuario'
         verbose_name_plural = 'Usuarios'
         ordering = ['-id']
+
+
