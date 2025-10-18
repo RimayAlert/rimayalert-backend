@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
 
-
     # Allauth
     'allauth',
     'allauth.account',
@@ -58,6 +57,7 @@ INSTALLED_APPS = [
     # Core Apps
     'core.authentication',
     'core.dashboard',
+    'core.community',
     'core.incident'
 ]
 
