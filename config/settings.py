@@ -57,7 +57,8 @@ INSTALLED_APPS = [
 
     # Core Apps
     'core.authentication',
-    'core.dashboard'
+    'core.dashboard',
+    'core.incident'
 ]
 
 SITE_ID = 1
