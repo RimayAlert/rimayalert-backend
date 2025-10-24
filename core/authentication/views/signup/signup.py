@@ -10,7 +10,7 @@ class SignupView(FormView):
     success_url = reverse_lazy('authentication:login')
 
     def form_valid(self, form):
-        form.save()
+        user = form.save()
         # login(self.request, user)
         return super().form_valid(form)
 
