@@ -1,37 +1,17 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Code Crafters{% endblock %}</title>
+{% extends "layouts/base_app.html" %}
 
-    <!-- Bootstrap 5 -->
-    <link rel="stylesheet" href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{% static 'lib/fonts/fontawesome/css/all.min.css' %}">
-
-    {% block extra_css %}
-    {% endblock %}
-
-</head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Mi Dashboard</a>
-        <div class="d-flex">
-            <a href="" class="btn btn-outline-light">Cerrar sesión</a>
+{% block app %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="">Mi Dashboard</a>
+            <div class="d-flex">
+                <a href="" class="btn btn-outline-light">Cerrar sesión</a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<main class="container mt-4">
-    {% block content %}
-    {% endblock %}
-</main>
-
-<!-- Bootstrap 5 Bundle JS -->
-<script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
-</body>
-</html>
+    <main class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+{% endblock app %}
