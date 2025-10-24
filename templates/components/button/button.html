@@ -1,0 +1,14 @@
+{% load widget_tweaks %}
+<div class="mb-3">
+    <button
+            type="{{ type|default:'submit' }}"
+            class="btn btn-{{ style|default:'primary' }} {{ class|default:'' }} {% if full_width %}w-100{% endif %}"
+            {% if id %}id="{{ id }}"{% endif %}
+            {% if disabled %}disabled{% endif %}
+    >
+        {% if icon %}
+            <ion-icon name="{{ icon }}"></ion-icon>
+        {% endif %}
+        {{ text|default:"Enviar" }}
+    </button>
+</div>
