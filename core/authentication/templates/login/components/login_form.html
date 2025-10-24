@@ -2,10 +2,10 @@
 
 {% block controls %}
     <div class="mb-3">
-        {% include "components/input/text.html" with field=form.username icon="fas fa-user" %}
+        {% include "components/field/input.html" with field=form.username icon="fas fa-user" %}
     </div>
     <div class="mb-3">
-        {% include "components/input/password.html" with field=form.password icon="fas fa-lock" %}
+        {% include "components/field/input.html" with field=form.password icon="fas fa-lock" %}
     </div>
     {% include "components/button/button.html" with text="Iniciar sesión" full_width=True %}
 
