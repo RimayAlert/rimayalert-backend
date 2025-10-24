@@ -1,26 +1,14 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Code Crafters{% endblock %}</title>
+{% extends "layouts/base_app.html" %}
 
-    <!-- Bootstrap 5 -->
-    <link rel="stylesheet" href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{% static 'lib/fonts/fontawesome/css/all.min.css' %}">
-
-    {% block extra_css %}
-    {% endblock %}
-
-</head>
-<body>
-    {% block content %}
-    {% endblock %}
-
-    <!-- Bootstrap 5 Bundle JS -->
-    <script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
-</body>
-</html>
+{% block app %}
+    <div class="container py-5 bg-body-tertiary">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm rounded-4 p-4">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock app %}
