@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Rimay Alert{% endblock %}</title>
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'lib/fonts/fontawesome/css/all.min.css' %}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/globals.css' %}">
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+<body>
+{% block app %}
+{% endblock app %}
+
+<!-- Bootstrap 5 Bundle JS -->
+<script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+{% block extra_js %}
+{% endblock extra_js %}
+</body>
+</html>

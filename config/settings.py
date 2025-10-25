@@ -44,9 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
     'rest_framework',
     'rest_framework.authtoken',
-
 
     # Allauth
     'allauth',
@@ -57,7 +57,9 @@ INSTALLED_APPS = [
 
     # Core Apps
     'core.authentication',
-    'core.dashboard'
+    'core.dashboard',
+    'core.community',
+    'core.incident'
 ]
 
 SITE_ID = 1

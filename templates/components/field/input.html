@@ -1,0 +1,27 @@
+{% load widget_tweaks %}
+
+{% with input_type=field.field.widget.input_type %}
+    {% if input_type == "text" or input_type == "email" or input_type == "password" or input_type == "tel" or input_type == "url" or input_type == "search" or input_type == "number" %}
+        <label for="{{ field.id_for_label }}" class="form-label">
+            {{ field.label }}
+            {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
+        {% if icon %}
+            <div class="input-group">
+                <span class="input-group-text"><i class="{{ icon }}"></i></span>
+                {% render_field field class="form-control" %}
+            </div>
+        {% else %}
+            {% render_field field class="form-control" %}
+        {% endif %}
+        {% for error in field.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-danger">
+            Error: este componente acepta tipos <strong>text, email, password, tel, url, search, number</strong>,
+            recibido: <strong>{{ input_type }}</strong>.
+        </div>
+    {% endif %}
+{% endwith %}
+

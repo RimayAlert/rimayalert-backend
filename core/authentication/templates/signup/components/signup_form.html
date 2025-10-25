@@ -1,0 +1,42 @@
+{% extends "components/form/form.html" %}
+
+{% block controls %}
+    <div class="mb-3">
+        {% include "components/field/input.html" with field=form.username icon="fas fa-user" %}
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            {% include "components/field/input.html" with field=form.email icon="fas fa-envelope" %}
+        </div>
+        <div class="col-md-6">
+            {% include "components/field/input.html" with field=form.dni icon="fas fa-id-card" %}
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            {% include "components/field/input.html" with field=form.first_name icon="fas fa-user-circle" %}
+        </div>
+        <div class="col-md-6">
+            {% include "components/field/input.html" with field=form.last_name icon="fas fa-user-tag" %}
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            {% include "components/field/input.html" with field=form.password1 icon="fas fa-lock" %}
+        </div>
+        <div class="col-md-6">
+            {% include "components/field/input.html" with field=form.password2 icon="fas fa-lock" %}
+        </div>
+    </div>
+
+    {% include "components/button/button.html" with text="Registrarse" full_width=True %}
+
+    <div class="mt-4 text-center">
+        <span class="text-muted">¿Ya tienes una cuenta?</span>
+        <a href="{{ login_url }}" class="text-decoration-none fw-semibold text-primary ms-1">Inicia sesión</a>
+    </div>
+{% endblock %}
+

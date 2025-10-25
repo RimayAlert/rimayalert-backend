@@ -1,0 +1,18 @@
+{% load widget_tweaks %}
+{% if field.field.widget.input_type == "checkbox" %}
+    <div class="form-check">
+        {% render_field field class="form-check-input" %}
+        <label class="form-check-label" for="{{ field.id_for_label }}">
+            {{ field.label }}
+            {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
+        {% for error in field.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-danger">
+        Error: este componente solo admite campos tipo <strong>checkbox</strong>,
+        recibido: {{ field.field.widget.input_type }}.
+    </div>
+{% endif %}
