@@ -1,6 +1,147 @@
 {% extends "layouts/base_dashboard.html" %}
 
 {% block content %}
-    <h1 class="mb-4">Bienvenido, {{ request.user.get_full_name|default:request.user.username }}</h1>
-    <p>Este es tu panel de control.</p>
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 fw-bold mb-1">Bienvenido al Dashboard</h1>
+            <p class="text-muted">Gestiona tu sistema de alertas de manera eficiente</p>
+        </div>
+    </div>
+
+    <!-- Ejemplo de tarjetas de estadísticas -->
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-primary bg-opacity-10 rounded p-3">
+                                <i class="fas fa-exclamation-triangle fs-4 text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="text-muted small text-uppercase">Incidentes Activos</div>
+                            <div class="h4 fw-bold mb-0">12</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-success bg-opacity-10 rounded p-3">
+                                <i class="fas fa-users fs-4 text-success"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="text-muted small text-uppercase">Comunidades</div>
+                            <div class="h4 fw-bold mb-0">24</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-warning bg-opacity-10 rounded p-3">
+                                <i class="fas fa-bell fs-4 text-warning"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="text-muted small text-uppercase">Alertas Enviadas</div>
+                            <div class="h4 fw-bold mb-0">156</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-info bg-opacity-10 rounded p-3">
+                                <i class="fas fa-user-shield fs-4 text-info"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="text-muted small text-uppercase">Usuarios Activos</div>
+                            <div class="h4 fw-bold mb-0">48</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ejemplo de tabla -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="card-title mb-0 fw-bold">Incidentes Recientes</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                            <tr>
+                                <th class="border-0 ps-3">ID</th>
+                                <th class="border-0">Tipo</th>
+                                <th class="border-0">Comunidad</th>
+                                <th class="border-0">Estado</th>
+                                <th class="border-0">Fecha</th>
+                                <th class="border-0 pe-3">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="ps-3">#001</td>
+                                <td><span class="badge bg-danger">Emergencia</span></td>
+                                <td>Comunidad Norte</td>
+                                <td><span class="badge bg-warning text-dark">En proceso</span></td>
+                                <td>24/10/2025 14:30</td>
+                                <td class="pe-3">
+                                    <button class="btn btn-sm btn-outline-primary">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-3">#002</td>
+                                <td><span class="badge bg-warning text-dark">Advertencia</span></td>
+                                <td>Comunidad Sur</td>
+                                <td><span class="badge bg-success">Resuelto</span></td>
+                                <td>24/10/2025 12:15</td>
+                                <td class="pe-3">
+                                    <button class="btn btn-sm btn-outline-primary">Ver</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-3">#003</td>
+                                <td><span class="badge bg-info">Información</span></td>
+                                <td>Comunidad Este</td>
+                                <td><span class="badge bg-success">Resuelto</span></td>
+                                <td>24/10/2025 10:00</td>
+                                <td class="pe-3">
+                                    <button class="btn btn-sm btn-outline-primary">Ver</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Mostrando 3 de 12 incidentes</small>
+                        <a href="" class="btn btn-sm btn-outline-primary">Ver todos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

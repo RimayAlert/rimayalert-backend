@@ -1,17 +1,18 @@
 {% extends "layouts/base_app.html" %}
 
 {% block app %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="">Mi Dashboard</a>
-            <div class="d-flex">
-                <a href="" class="btn btn-outline-light">Cerrar sesión</a>
-            </div>
+    {% include "components/navbar/navbar.html" %}
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            {% include "components/sidebar/sidebar-desktop.html" %}
+            {% include "components/sidebar/sidebar-mobile.html" %}
+            <main class="col-lg-10 col-md-9 col-12" style="min-height: calc(100vh - 56px);">
+                <div class="p-3 p-md-4">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+                {% include "components/footer/footer.html" %}
+            </main>
         </div>
-    </nav>
-
-    <main class="container mt-4">
-        {% block content %}
-        {% endblock %}
-    </main>
+    </div>
 {% endblock app %}
