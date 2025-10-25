@@ -3,6 +3,7 @@ from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.db import models
 from django.utils import timezone
 
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
         if not username:
@@ -42,7 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.get_full_name()
 
     def get_full_name(self):
-        return f'{self.first_name.upper()} {self.last_name.upper()}'
+        return f'{self.first_name} {self.last_name}'.upper()
 
     @classmethod
     def get_or_create_user(cls, data_user):
@@ -65,5 +66,3 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'Usuario'
         verbose_name_plural = 'Usuarios'
         ordering = ['-id']
-
-
