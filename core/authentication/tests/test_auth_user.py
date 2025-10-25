@@ -46,7 +46,7 @@ class TestAuthApiUser(TestCase):
         user = User.objects.create_user(
             username='testuser',
             email='test@example.com',
-            password='testpass123',
+            password=secrets.token_urlsafe(32),
             first_name='Juan',
             last_name='Pérez'
         )
@@ -58,7 +58,7 @@ class TestAuthApiUser(TestCase):
         user = User.objects.create_user(
             username='testuser2',
             email='test2@example.com',
-            password='testpass123',
+            password=secrets.token_urlsafe(32),
             first_name='María',
             last_name='González'
         )
