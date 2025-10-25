@@ -40,3 +40,28 @@ class TestAuthApiUser(TestCase):
         token2 = result2['token']
 
         self.assertEqual(token1, token2)
+
+    def test_user_get_full_name_returns_uppercase(self):
+        """Test that get_full_name returns uppercase full name"""
+        user = User.objects.create_user(
+            username='testuser',
+            email='test@example.com',
+            password='testpass123',
+            first_name='Juan',
+            last_name='Pérez'
+        )
+        expected_full_name = 'JUAN PÉREZ'
+        self.assertEqual(user.get_full_name(), expected_full_name)
+
+    def test_user_str_method_returns_full_name(self):
+        """Test that __str__ method returns the full name"""
+        user = User.objects.create_user(
+            username='testuser2',
+            email='test2@example.com',
+            password='testpass123',
+            first_name='María',
+            last_name='González'
+        )
+        self.assertEqual(str(user), user.get_full_name())
+        self.assertEqual(str(user), 'MARÍA GONZÁLEZ')
+
