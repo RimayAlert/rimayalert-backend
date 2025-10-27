@@ -29,7 +29,7 @@ class RegisterUserApiView(APIView):
 
     def map_data_profile(self, request_data):
         return {
-            "displayName": request_data.get("displayName"),
+            "displayName": request_data.get("displayName")
         }
 
     def post(self, request, *args, **kwargs):
@@ -47,7 +47,7 @@ class RegisterUserApiView(APIView):
         except ValidationError as ve:
             return Response({'errors': ve.detail}, status=status.HTTP_400_BAD_REQUEST)
         except IntegrityError as ie:
-            return Response({'errors': str(ie)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'errors': 'User with this information already exists'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger.error(str(e))
             return Response({'detail': 'Internal server error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
