@@ -1,0 +1,30 @@
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title mb-3">
+            <i class="bi bi-search"></i> Buscar Incidentes
+        </h5>
+        <form method="GET" action="">
+            <div class="row g-3">
+                <!-- Filtro por tipo de incidente -->
+                <div class="col-md-5">
+                    {% include 'components/field/select.html' with field=search_form.type icon="bi bi-folder" %}
+                </div>
+
+                <!-- Filtro por estado del incidente -->
+                <div class="col-md-5">
+                    {% include 'components/field/select.html' with field=search_form.status icon="bi bi-info-circle" %}
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="col-md-2 d-flex align-items-end gap-2">
+                    {% include 'components/button/button.html' with type="submit" text="Buscar" icon="bi bi-search" style="primary" class="mb-3" %}
+                    <a href="{% url request.resolver_match.url_name %}" class="btn btn-outline-secondary mb-3"
+                       title="Limpiar filtros">
+                        <i class="bi bi-x-circle"></i>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

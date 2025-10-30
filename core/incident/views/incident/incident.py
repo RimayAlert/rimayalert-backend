@@ -1,6 +1,7 @@
 from django.views.generic import ListView
 
 from core.incident.models import Incident
+from core.incident.forms import SearchIncidentForm
 
 
 class IncidentListView(ListView):
@@ -14,10 +15,20 @@ class IncidentListView(ListView):
             'incident_status',
             'reported_by_user',
         )
-        incident_type = self.request.GET.get('type')
-        if incident_type:
-            queryset = queryset.filter(incident_type__name=incident_type)
-        incident_status = self.request.GET.get('status')
-        if incident_status:
-            queryset = queryset.filter(incident_status__name=incident_status)
+
+        form = SearchIncidentForm(self.request.GET)
+        if form.is_valid():
+            incident_type = form.cleaned_data.get('type')
+            if incident_type:
+                queryset = queryset.filter(incident_type=incident_type)
+
+            incident_status = form.cleaned_data.get('status')
+            if incident_status:
+                queryset = queryset.filter(incident_status=incident_status)
+
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_form'] = SearchIncidentForm(self.request.GET or None)
+        return context

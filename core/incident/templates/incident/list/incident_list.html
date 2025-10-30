@@ -1,6 +1,7 @@
 {% extends "layouts/base_dashboard.html" %}
 
 {% block content %}
+    {% include 'incident/list/components/search.html' %}
     {% include 'incident/list/components/table.html' %}
     {% include 'components/paginator/paginator.html' %}
 {% endblock content %}
