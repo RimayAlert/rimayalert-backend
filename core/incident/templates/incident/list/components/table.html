@@ -1,0 +1,17 @@
+{% extends 'components/table/table.html' %}
+
+{% block columns %}
+    <th scope="col">ID</th>
+    <th scope="col">Título</th>
+    <th scope="col">Estado</th>
+    <th scope="col">Prioridad</th>
+    <th scope="col">Fecha de reporte</th>
+{% endblock columns %}
+
+{% block rows %}
+    <td>{{ item.id }}</td>
+    <td>{{ item.title }}</td>
+    <td>{{ item.incident_status }}</td>
+    <td>{{ item.severity_level }}</td>
+    <td>{{ item.reported_at|date:"d/m/Y H:i" }}</td>
+{% endblock %}
