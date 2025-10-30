@@ -1,0 +1,194 @@
+{% extends "layouts/base_dashboard.html" %}
+
+{% block content %}
+    <div class="container-fluid">
+        <!-- Botón de regreso -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">Detalle del Incidente</h2>
+            <a href="{% url 'incident:incident_list' %}" class="btn btn-outline-primary btn-sm">
+                <i class="fa-solid fa-arrow-left"></i> Regresar al listado
+            </a>
+        </div>
+
+        <!-- Tarjeta principal -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fa-solid fa-triangle-exclamation"></i> {{ incident.title }}
+                    </h4>
+                    <span class="badge bg-light text-dark">ID: #{{ incident.id }}</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Información de Estado y Prioridad -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card border-start border-primary border-4">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-2">
+                                    <i class="fa-solid fa-info-circle"></i> Estado
+                                </h6>
+                                <h5 class="mb-0">
+                                    <span class="badge bg-info">{{ incident.incident_status }}</span>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-start border-warning border-4">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-2">
+                                    <i class="fa-solid fa-exclamation-triangle"></i> Tipo
+                                </h6>
+                                <h5 class="mb-0">{{ incident.incident_type }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-start border-danger border-4">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-2">
+                                    <i class="fa-solid fa-gauge-high"></i> Nivel de Severidad
+                                </h6>
+                                <h5 class="mb-0">
+                                    {% if incident.severity_level %}
+                                        <span class="badge
+                                            {% if incident.severity_level <= 3 %}bg-success
+                                            {% elif incident.severity_level <= 6 %}bg-warning
+                                            {% else %}bg-danger{% endif %}">
+                                            {{ incident.severity_level }}/10
+                                        </span>
+                                    {% else %}
+                                        <span class="text-muted">No especificado</span>
+                                    {% endif %}
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Descripción -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5 class="border-bottom pb-2 mb-3">
+                            <i class="fa-solid fa-file-lines"></i> Descripción
+                        </h5>
+                        <p class="text-justify">{{ incident.description }}</p>
+                    </div>
+                </div>
+
+                <!-- Ubicación e Información -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5 class="border-bottom pb-2 mb-3">
+                            <i class="fa-solid fa-location-dot"></i> Ubicación
+                        </h5>
+                        <div class="mb-2">
+                            <strong>Dirección:</strong>
+                            <p class="mb-1">{{ incident.address|default:"No especificada" }}</p>
+                        </div>
+                        {% if incident.location %}
+                        <div class="mb-2">
+                            <strong>Coordenadas:</strong>
+                            <p class="mb-1">
+                                <i class="fa-solid fa-map-pin text-danger"></i>
+                                Lat: {{ incident.location.lat|default:"N/A" }},
+                                Lng: {{ incident.location.lng|default:"N/A" }}
+                            </p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="border-bottom pb-2 mb-3">
+                            <i class="fa-solid fa-users"></i> Información de Reporte
+                        </h5>
+                        <div class="mb-2">
+                            <strong>Comunidad:</strong>
+                            <p class="mb-1">{{ incident.community.name }}</p>
+                        </div>
+                        <div class="mb-2">
+                            <strong>Reportado por:</strong>
+                            <p class="mb-1">
+                                {% if incident.is_anonymous %}
+                                    <span class="badge bg-secondary">
+                                        <i class="fa-solid fa-user-secret"></i> Anónimo
+                                    </span>
+                                {% else %}
+                                    <i class="fa-solid fa-user"></i> {{ incident.reported_by_user.username }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fechas -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-2">
+                                    <i class="fa-solid fa-calendar-check"></i> Fecha del Suceso
+                                </h6>
+                                <p class="mb-0 fw-bold">{{ incident.occurred_at|date:"d/m/Y H:i" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-2">
+                                    <i class="fa-solid fa-calendar-plus"></i> Fecha de Reporte
+                                </h6>
+                                <p class="mb-0 fw-bold">
+                                    {{ incident.reported_at|date:"d/m/Y H:i"|default:"No especificada" }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información adicional -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-info d-flex align-items-center" role="alert">
+                            <i class="fa-solid fa-circle-info me-3 fs-4"></i>
+                            <div>
+                                <strong>Estado del incidente:</strong>
+                                {% if incident.is_active %}
+                                    <span class="badge bg-success">Activo</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Inactivo</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="{% url 'incident:incident_list' %}" class="btn btn-secondary">
+                                <i class="fa-solid fa-arrow-left"></i> Volver
+                            </a>
+                            <button type="button" class="btn btn-warning">
+                                <i class="fa-solid fa-edit"></i> Editar
+                            </button>
+                            <button type="button" class="btn btn-danger">
+                                <i class="fa-solid fa-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                <small>
+                    <i class="fa-solid fa-clock"></i>
+                    Última actualización: {{ incident.created_at|date:"d/m/Y H:i" }}
+                </small>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+

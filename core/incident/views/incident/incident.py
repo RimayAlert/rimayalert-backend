@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from core.incident.models import Incident
 from core.incident.forms import SearchIncidentForm
@@ -32,3 +32,17 @@ class IncidentListView(ListView):
         context = super().get_context_data(**kwargs)
         context['search_form'] = SearchIncidentForm(self.request.GET or None)
         return context
+
+
+class IncidentDetailView(DetailView):
+    model = Incident
+    template_name = "incident/detail/incident_detail.html"
+    context_object_name = 'incident'
+
+    def get_queryset(self):
+        return super().get_queryset().select_related(
+            'incident_type',
+            'incident_status',
+            'reported_by_user',
+            'community',
+        )
