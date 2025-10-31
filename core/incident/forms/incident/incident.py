@@ -21,5 +21,3 @@ class SearchIncidentForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['type'].widget.input_type = 'select'
-        self.fields['status'].widget.input_type = 'select'
