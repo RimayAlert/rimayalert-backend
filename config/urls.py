@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('core.authentication.urls')),
     path('accounts/', include('allauth.urls')),
     path('dashboard/', include('core.dashboard.urls')),
+    path('incidents/', include('core.incident.urls')),
 ]
 
 if settings.DEBUG:

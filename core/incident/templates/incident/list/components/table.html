@@ -1,0 +1,36 @@
+{% extends 'components/table/table.html' %}
+
+{% block columns %}
+    <th scope="col">ID</th>
+    <th scope="col">Título</th>
+    <th scope="col">Estado</th>
+    <th scope="col">Prioridad</th>
+    <th scope="col">Fecha de reporte</th>
+    <th scope="col" class="text-center">Acciones</th>
+{% endblock columns %}
+
+{% block rows %}
+    <td>{{ item.id }}</td>
+    <td>{{ item.title }}</td>
+    <td>{{ item.incident_status }}</td>
+    <td>
+        {% if item.severity_level %}
+            <span class="badge
+                {% if item.severity_level <= 3 %}bg-success
+                {% elif item.severity_level <= 6 %}bg-warning
+                {% else %}bg-danger{% endif %}">
+                {{ item.severity_level }}
+            </span>
+        {% else %}
+            <span class="text-muted">-</span>
+        {% endif %}
+    </td>
+    <td>{{ item.reported_at|date:"d/m/Y H:i" }}</td>
+    <td class="text-center">
+        <a href="{% url 'incident:incident_detail' item.pk %}"
+           class="btn btn-sm btn-outline-primary"
+           title="Ver detalle">
+            <i class="fa-solid fa-eye"></i>
+        </a>
+    </td>
+{% endblock %}
