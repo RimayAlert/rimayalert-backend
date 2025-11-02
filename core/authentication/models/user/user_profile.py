@@ -2,7 +2,7 @@ from django.db import models
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField('authentication.User', on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField('authentication.User', on_delete=models.CASCADE, related_name='profiles_by_user')
     bio = models.TextField(null=True, blank=True, verbose_name='Biografía')
     alias_name = models.TextField(null=True, blank=True, verbose_name='Alias name')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de creación')

@@ -10,3 +10,13 @@ class AuthTokenSerializerInput(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+
+class UserProfileDataSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        return instance.to_json_api()
