@@ -66,13 +66,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_alias_name_by_user_profile(self):
         profile = self.profiles_by_user
         if profile:
-          return profile.alias_name
+            return profile.alias_name
         return None
 
     def to_json_api(self):
-        item = model_to_dict(self,exclude=['date_joined', 'password','is_superuser','is_staff','groups','user_permissions','last_login'])
+        item = model_to_dict(self, exclude=['date_joined', 'password', 'is_superuser', 'is_staff', 'groups',
+                                            'user_permissions', 'last_login'])
         item['full_name'] = self.get_full_name()
-        item['alias_name']  = self.get_alias_name_by_user_profile()
+        item['alias_name'] = self.get_alias_name_by_user_profile()
         return item
 
     class Meta:
