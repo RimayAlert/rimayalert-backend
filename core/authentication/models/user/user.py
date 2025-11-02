@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.db import models
+from django.forms import model_to_dict
 from django.utils import timezone
 
 
@@ -61,6 +62,18 @@ class User(AbstractBaseUser, PermissionsMixin):
             return user
         except Exception as e:
             raise Exception(f'Error creating or getting user: {e}')
+
+    def get_alias_name_by_user_profile(self):
+        profile = self.profiles_by_user
+        if profile:
+          return profile.alias_name
+        return None
+
+    def to_json_api(self):
+        item = model_to_dict(self,exclude=['date_joined', 'password','is_superuser','is_staff','groups','user_permissions','last_login'])
+        item['full_name'] = self.get_full_name()
+        item['alias_name']  = self.get_alias_name_by_user_profile()
+        return item
 
     class Meta:
         verbose_name = 'Usuario'
