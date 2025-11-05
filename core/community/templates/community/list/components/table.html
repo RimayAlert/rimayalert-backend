@@ -1,0 +1,32 @@
+{% extends 'components/table/table.html' %}
+
+{% block columns %}
+    <th scope="col">ID</th>
+    <th scope="col">Nombre</th>
+    <th scope="col">Descripción</th>
+    <th scope="col">Código Postal</th>
+    <th scope="col">Estado</th>
+    <th scope="col" class="text-center">Acciones</th>
+{% endblock columns %}
+
+{% block rows %}
+    <td>{{ item.id }}</td>
+    <td>{{ item.name }}</td>
+    <td>{{ item.description|truncatewords:10|default:"-" }}</td>
+    <td>{{ item.postal_code|default:"-" }}</td>
+    <td>
+        {% if item.is_active %}
+            <span class="badge bg-success">Activa</span>
+        {% else %}
+            <span class="badge bg-secondary">Inactiva</span>
+        {% endif %}
+    </td>
+    <td class="text-center">
+        <a href="{% url 'community:community_detail' item.pk %}"
+           class="btn btn-sm btn-outline-primary"
+           title="Ver detalle">
+            <i class="fa-solid fa-eye"></i>
+        </a>
+    </td>
+{% endblock %}
+
