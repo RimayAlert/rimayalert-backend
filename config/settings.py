@@ -60,7 +60,8 @@ INSTALLED_APPS = [
     'core.authentication',
     'core.dashboard',
     'core.community',
-    'core.incident'
+    'core.incident',
+    'core.shared'
 ]
 
 SITE_ID = 1

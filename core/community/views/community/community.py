@@ -41,7 +41,7 @@ class CommunityDetailView(DetailView):
 class CommunityMemberListView(ListView):
     model = CommunityMembership
     template_name = "community/member_list/community_member_list.html"
-    context_object_name = 'members'
+    context_object_name = 'items'
     paginate_by = 20
 
     def get_queryset(self):
