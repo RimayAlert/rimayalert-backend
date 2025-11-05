@@ -27,6 +27,11 @@
            title="Ver detalle">
             <i class="fa-solid fa-eye"></i>
         </a>
+        <a href="{% url 'community:community_members' item.pk %}"
+           class="btn btn-sm btn-outline-info"
+           title="Ver miembros">
+            <i class="fa-solid fa-users"></i>
+        </a>
     </td>
 {% endblock %}
 

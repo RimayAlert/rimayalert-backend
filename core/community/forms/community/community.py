@@ -1,4 +1,5 @@
 from django import forms
+from core.community.models import CommunityMembership
 
 
 class SearchCommunityForm(forms.Form):
@@ -24,4 +25,30 @@ class SearchCommunityForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+
+class SearchMemberForm(forms.Form):
+    role = forms.ChoiceField(
+        required=False,
+        label='Rol',
+        choices=[('', 'Todos los roles')] + list(CommunityMembership.ROLE_CHOICES),
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    is_verified = forms.NullBooleanField(
+        required=False,
+        label='Estado de verificación',
+        widget=forms.Select(
+            choices=[
+                ('', 'Todos'),
+                ('true', 'Verificados'),
+                ('false', 'No verificados'),
+            ],
+            attrs={'class': 'form-select'}
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
 
