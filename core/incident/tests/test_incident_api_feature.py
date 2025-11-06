@@ -1,4 +1,3 @@
-import logging
 import secrets
 from unittest.mock import patch, MagicMock
 from django.test import TestCase
@@ -6,7 +5,7 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 
 from core.incident.api.incident.feature.incident import CreateIncidentFeature
-from core.incident.models import Incident, IncidentType, IncidentStatus, IncidentMedia
+from core.incident.models import IncidentType, IncidentMedia
 
 User = get_user_model()
 
