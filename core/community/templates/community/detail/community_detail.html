@@ -1,5 +1,10 @@
 {% extends "layouts/base_dashboard.html" %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+{% endblock extra_css %}
+
 {% block content %}
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -58,17 +63,18 @@
                 </div>
 
                 {% if community.boundary_area %}
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="border-bottom pb-2 mb-3">
-                            <i class="fa-solid fa-map-location-dot"></i> Área Límite
-                        </h5>
-                        <div class="alert alert-info">
-                            <i class="fa-solid fa-circle-info me-2"></i>
-                            Área límite definida (datos geográficos disponibles)
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h5 class="border-bottom pb-2 mb-3">
+                                <i class="fa-solid fa-map-location-dot"></i> Área Límite
+                            </h5>
+                            <div class="alert alert-info">
+                                <i class="fa-solid fa-circle-info me-2"></i>
+                                Área límite definida (datos geográficos disponibles)
+                            </div>
+                            <div id="map" style="height: 400px; border-radius: 8px; overflow: hidden;"></div>
                         </div>
                     </div>
-                </div>
                 {% endif %}
 
                 <div class="row mb-4">
@@ -123,3 +129,28 @@
     </div>
 {% endblock content %}
 
+{% block extra_js %}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const boundary = {{ community.boundary_area|safe }};
+            if (!boundary || !boundary.coordinates) return;
+
+            const map = L.map("map");
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+            }).addTo(map);
+
+            const polygon = L.polygon(boundary.coordinates[0].map(coord => [coord[1], coord[0]]), {
+                color: "blue",
+                fillColor: "#3f8efc",
+                fillOpacity: 0.4
+            }).addTo(map);
+
+            map.fitBounds(polygon.getBounds());
+        });
+    </script>
+{% endblock extra_js %}
