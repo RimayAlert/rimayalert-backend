@@ -44,5 +44,4 @@ class IncidentDetailView(DetailView):
             'incident_type',
             'incident_status',
             'reported_by_user',
-            'community',
         )
