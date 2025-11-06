@@ -32,24 +32,6 @@
                         </div>
                     </div>
 
-                    <!-- Módulo Reportes -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100 border-0 shadow-sm hover-card">
-                            <div class="card-body text-center p-4 d-flex flex-column">
-                                <div class="mb-3">
-                                    <i class="fas fa-file-alt fa-3x text-success"></i>
-                                </div>
-                                <h5 class="card-title fw-bold mb-2">Reportes</h5>
-                                <p class="card-text text-muted small flex-grow-1">
-                                    Genera y visualiza reportes estadísticos del sistema
-                                </p>
-                                <a href="#" class="btn btn-outline-success btn-sm mt-2">
-                                    Ver más <i class="fas fa-arrow-right ms-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Módulo Comunidad -->
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="card h-100 border-0 shadow-sm hover-card">
@@ -61,7 +43,7 @@
                                 <p class="card-text text-muted small flex-grow-1">
                                     Gestiona las comunidades y sus miembros
                                 </p>
-                                <a href="#" class="btn btn-outline-info btn-sm mt-2">
+                                <a href="{% url "community:community_list" %}" class="btn btn-outline-info btn-sm mt-2">
                                     Ver más <i class="fas fa-arrow-right ms-1"></i>
                                 </a>
                             </div>
