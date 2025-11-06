@@ -612,7 +612,7 @@
       "name": "Robo",
       "code": "003",
       "description": "Robo",
-      "icon": "NN",
+      "icon": "fa-solid fa-mask",
       "color_hex": "FF0000",
       "default_severity": 4,
       "requires_authority": true
@@ -625,7 +625,7 @@
       "name": "Vandalismo",
       "code": "004",
       "description": "Actos de vandalismo y daño a propiedad",
-      "icon": "VN",
+      "icon": "fa-solid fa-spray-can",
       "color_hex": "FFA500",
       "default_severity": 3,
       "requires_authority": true
@@ -638,7 +638,7 @@
       "name": "Sospechoso",
       "code": "005",
       "description": "Actividad sospechosa",
-      "icon": "SP",
+      "icon": "fa-solid fa-user-secret",
       "color_hex": "FFFF00",
       "default_severity": 2,
       "requires_authority": false
@@ -651,7 +651,7 @@
       "name": "Accidente",
       "code": "006",
       "description": "Accidente vehicular o personal",
-      "icon": "AC",
+      "icon": "fa-solid fa-car-burst",
       "color_hex": "0000FF",
       "default_severity": 3,
       "requires_authority": true
