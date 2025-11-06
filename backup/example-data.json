@@ -613,7 +613,7 @@
       "code": "003",
       "description": "Robo",
       "icon": "fa-solid fa-mask",
-      "color_hex": "FF0000",
+      "color_hex": "#dc3545",
       "default_severity": 4,
       "requires_authority": true
     }
@@ -626,7 +626,7 @@
       "code": "004",
       "description": "Actos de vandalismo y daño a propiedad",
       "icon": "fa-solid fa-spray-can",
-      "color_hex": "FFA500",
+      "color_hex": "#6f42c1",
       "default_severity": 3,
       "requires_authority": true
     }
@@ -639,7 +639,7 @@
       "code": "005",
       "description": "Actividad sospechosa",
       "icon": "fa-solid fa-user-secret",
-      "color_hex": "FFFF00",
+      "color_hex": "#fd7e14",
       "default_severity": 2,
       "requires_authority": false
     }
@@ -652,7 +652,7 @@
       "code": "006",
       "description": "Accidente vehicular o personal",
       "icon": "fa-solid fa-car-burst",
-      "color_hex": "0000FF",
+      "color_hex": "#ffc107",
       "default_severity": 3,
       "requires_authority": true
     }
