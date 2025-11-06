@@ -178,6 +178,11 @@ LOGIN_URL = '/login/'
 
 AUTH_USER_MODEL = 'authentication.User'
 
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # dev utils
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
