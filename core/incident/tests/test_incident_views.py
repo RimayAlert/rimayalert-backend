@@ -65,7 +65,6 @@ class IncidentListViewTest(TestCase):
         now = timezone.now()
         cls.incident_1 = Incident.objects.create(
             reported_by_user=cls.user,
-            community=cls.community,
             incident_type=cls.incident_type_1,
             incident_status=cls.status_open,
             title='Incidente de Robo 1',
@@ -80,7 +79,6 @@ class IncidentListViewTest(TestCase):
 
         cls.incident_2 = Incident.objects.create(
             reported_by_user=cls.user,
-            community=cls.community,
             incident_type=cls.incident_type_2,
             incident_status=cls.status_closed,
             title='Incidente de Accidente 1',
@@ -95,7 +93,6 @@ class IncidentListViewTest(TestCase):
 
         cls.incident_3 = Incident.objects.create(
             reported_by_user=cls.user,
-            community=cls.community,
             incident_type=cls.incident_type_1,
             incident_status=cls.status_closed,
             title='Incidente de Robo 2',
@@ -209,7 +206,6 @@ class IncidentDetailViewTest(TestCase):
         now = timezone.now()
         cls.incident = Incident.objects.create(
             reported_by_user=cls.user,
-            community=cls.community,
             incident_type=cls.incident_type,
             incident_status=cls.status,
             title='Emergencia Médica Test',
@@ -266,7 +262,6 @@ class IncidentDetailViewTest(TestCase):
         incident = response.context['incident']
 
         self.assertEqual(incident.reported_by_user, self.user)
-        self.assertEqual(incident.community, self.community)
         self.assertEqual(incident.incident_type, self.incident_type)
         self.assertEqual(incident.incident_status, self.status)
 
@@ -282,7 +277,6 @@ class IncidentDetailViewTest(TestCase):
             response = self.client.get(self.url)
             incident = response.context['incident']
             _ = incident.reported_by_user.username
-            _ = incident.community.name
             _ = incident.incident_type.name
             _ = incident.incident_status.name
 
@@ -363,7 +357,6 @@ class IncidentModelTest(TestCase):
         """Verifica que se puede crear un incidente correctamente."""
         incident = Incident.objects.create(
             reported_by_user=self.user,
-            community=self.community,
             incident_type=self.incident_type,
             incident_status=self.status,
             title='Test Incendio',
@@ -379,7 +372,6 @@ class IncidentModelTest(TestCase):
         """Verifica que la representación en string es el título."""
         incident = Incident.objects.create(
             reported_by_user=self.user,
-            community=self.community,
             incident_type=self.incident_type,
             incident_status=self.status,
             title='String Test Incendio',
@@ -394,7 +386,6 @@ class IncidentModelTest(TestCase):
         """Verifica que el flag anónimo funciona correctamente."""
         incident = Incident.objects.create(
             reported_by_user=self.user,
-            community=self.community,
             incident_type=self.incident_type,
             incident_status=self.status,
             title='Anonymous Test',
@@ -410,7 +401,6 @@ class IncidentModelTest(TestCase):
         """Verifica que el flag activo por defecto es True."""
         incident = Incident.objects.create(
             reported_by_user=self.user,
-            community=self.community,
             incident_type=self.incident_type,
             incident_status=self.status,
             title='Active Test',
@@ -425,7 +415,6 @@ class IncidentModelTest(TestCase):
         """Verifica que los campos de ubicación funcionan correctamente."""
         incident = Incident.objects.create(
             reported_by_user=self.user,
-            community=self.community,
             incident_type=self.incident_type,
             incident_status=self.status,
             title='Location Test',
@@ -441,7 +430,6 @@ class IncidentModelTest(TestCase):
         """Verifica que el nivel de severidad es opcional."""
         incident = Incident.objects.create(
             reported_by_user=self.user,
-            community=self.community,
             incident_type=self.incident_type,
             incident_status=self.status,
             title='No Severity Test',
