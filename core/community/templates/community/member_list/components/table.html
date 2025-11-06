@@ -1,0 +1,58 @@
+{% extends 'components/table/table.html' %}
+
+{% block columns %}
+    <th scope="col">ID</th>
+    <th scope="col">Usuario</th>
+    <th scope="col">Email</th>
+    <th scope="col">Rol</th>
+    <th scope="col">Estado</th>
+    <th scope="col">Fecha de unión</th>
+{% endblock columns %}
+
+{% block rows %}
+    <td>{{ item.id }}</td>
+    <td>
+        <div class="d-flex align-items-center">
+            <div class="me-2">
+                <i class="fa-solid fa-user-circle fa-2x text-primary"></i>
+            </div>
+            <div>
+                <strong>{{ item.user.username }}</strong>
+                {% if item.user.first_name or item.user.last_name %}
+                <br>
+                <small class="text-muted">
+                    {{ item.user.first_name }} {{ item.user.last_name }}
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </td>
+    <td>{{ item.user.email|default:"-" }}</td>
+    <td>
+        {% if item.role == 'admin' %}
+            <span class="badge bg-danger">
+                <i class="fa-solid fa-crown"></i> {{ item.get_role_display }}
+            </span>
+        {% elif item.role == 'moderator' %}
+            <span class="badge bg-warning text-dark">
+                <i class="fa-solid fa-shield-alt"></i> {{ item.get_role_display }}
+            </span>
+        {% else %}
+            <span class="badge bg-secondary">
+                <i class="fa-solid fa-user"></i> {{ item.get_role_display }}
+            </span>
+        {% endif %}
+    </td>
+    <td>
+        {% if item.is_verified %}
+            <span class="badge bg-success">
+                <i class="fa-solid fa-check-circle"></i> Verificado
+            </span>
+        {% else %}
+            <span class="badge bg-warning text-dark">
+                <i class="fa-solid fa-clock"></i> Pendiente
+            </span>
+        {% endif %}
+    </td>
+    <td>{{ item.joined_at|date:"d/m/Y H:i" }}</td>
+{% endblock %}

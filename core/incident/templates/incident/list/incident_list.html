@@ -1,0 +1,12 @@
+{% extends "layouts/base_dashboard.html" %}
+
+{% block content %}
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'dashboard:dashboard' %}" class="btn btn-outline-primary btn-sm">
+            <i class="fa-solid fa-door-open"></i> Regresar al inicio
+        </a>
+    </div>
+    {% include 'incident/list/components/search.html' %}
+    {% include 'incident/list/components/table.html' %}
+    {% include 'components/paginator/paginator.html' %}
+{% endblock content %}

@@ -1,0 +1,36 @@
+{% extends "layouts/base_dashboard.html" %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-1">
+                <i class="fa-solid fa-users"></i> Miembros de {{ community.name }}
+            </h2>
+            <p class="text-muted mb-0">
+                {{ community.description|default:"" }}
+            </p>
+        </div>
+        <a href="{% url 'community:community_detail' community.pk %}" class="btn btn-outline-primary btn-sm">
+            <i class="fa-solid fa-arrow-left"></i> Volver a la comunidad
+        </a>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-start border-primary border-4">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">
+                        <i class="fa-solid fa-users"></i> Total de miembros
+                    </h6>
+                    <h4 class="mb-0">{{ page_obj.paginator.count }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'community/member_list/components/search.html' %}
+    {% include 'community/member_list/components/table.html' %}
+    {% include 'components/paginator/paginator.html' %}
+{% endblock content %}
+
