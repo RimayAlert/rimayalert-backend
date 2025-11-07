@@ -1,0 +1,2 @@
+# package for dashboard tests
+
