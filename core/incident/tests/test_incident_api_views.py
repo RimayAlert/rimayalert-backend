@@ -27,7 +27,7 @@ class RegisterIncidentApiViewTest(TestCase):
         )
 
         self.incident_data = {
-            'type': 'Accidente de tránsito',
+            'type': 'Robo',
             'description': 'Choque en la intersección',
             'location': 'Av. Principal y Calle 5',
             'latitude': -12.0464,

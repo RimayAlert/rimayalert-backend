@@ -69,8 +69,7 @@ class IncidentListViewTest(TestCase):
             incident_status=cls.status_open,
             title='Incidente de Robo 1',
             description='Descripción del robo 1',
-            latitude=0.0,
-            longitude=0.0,
+            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
             address='Calle Principal 123',
             severity_level=5,
             occurred_at=now - timedelta(hours=2),
@@ -83,8 +82,7 @@ class IncidentListViewTest(TestCase):
             incident_status=cls.status_closed,
             title='Incidente de Accidente 1',
             description='Descripción del accidente 1',
-            latitude=0.1,
-            longitude=0.1,
+            location={'type': 'Point', 'coordinates': [0.1, 0.1]},
             address='Calle Secundaria 456',
             severity_level=3,
             occurred_at=now - timedelta(hours=5),
@@ -97,8 +95,7 @@ class IncidentListViewTest(TestCase):
             incident_status=cls.status_closed,
             title='Incidente de Robo 2',
             description='Descripción del robo 2',
-            latitude=0.2,
-            longitude=0.2,
+            location={'type': 'Point', 'coordinates': [0.2, 0.2]},
             address='Calle Terciaria 789',
             severity_level=7,
             occurred_at=now - timedelta(hours=10),
@@ -210,8 +207,7 @@ class IncidentDetailViewTest(TestCase):
             incident_status=cls.status,
             title='Emergencia Médica Test',
             description='Descripción de la emergencia médica',
-            latitude=5.5,
-            longitude=-73.2,
+            location={'type': 'Point', 'coordinates': [-73.2, 5.5]},
             address='Hospital Central, Cra 50 #10-50',
             severity_level=9,
             occurred_at=now - timedelta(hours=1),
@@ -361,8 +357,7 @@ class IncidentModelTest(TestCase):
             incident_status=self.status,
             title='Test Incendio',
             description='Descripción de incendio',
-            latitude=0.0,
-            longitude=0.0,
+            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
             occurred_at=timezone.now()
         )
         self.assertIsNotNone(incident.id)
@@ -376,8 +371,7 @@ class IncidentModelTest(TestCase):
             incident_status=self.status,
             title='String Test Incendio',
             description='Description',
-            latitude=0.0,
-            longitude=0.0,
+            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
             occurred_at=timezone.now()
         )
         self.assertEqual(str(incident), 'String Test Incendio')
@@ -390,8 +384,7 @@ class IncidentModelTest(TestCase):
             incident_status=self.status,
             title='Anonymous Test',
             description='Description',
-            latitude=0.0,
-            longitude=0.0,
+            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
             is_anonymous=True,
             occurred_at=timezone.now()
         )
@@ -405,26 +398,25 @@ class IncidentModelTest(TestCase):
             incident_status=self.status,
             title='Active Test',
             description='Description',
-            latitude=0.0,
-            longitude=0.0,
+            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
             occurred_at=timezone.now()
         )
         self.assertTrue(incident.is_active)
 
     def test_incident_json_location_field(self):
-        """Verifica que los campos de ubicación funcionan correctamente."""
+        """Verifica que el campo location con formato GeoJSON funciona correctamente."""
         incident = Incident.objects.create(
             reported_by_user=self.user,
             incident_type=self.incident_type,
             incident_status=self.status,
             title='Location Test',
             description='Description',
-            latitude=10.5,
-            longitude=-75.5,
+            location={'type': 'Point', 'coordinates': [-75.5, 10.5]},
             occurred_at=timezone.now()
         )
-        self.assertEqual(incident.latitude, 10.5)
-        self.assertEqual(incident.longitude, -75.5)
+        self.assertIsNotNone(incident.location)
+        self.assertEqual(incident.location['type'], 'Point')
+        self.assertEqual(incident.location['coordinates'], [-75.5, 10.5])
 
     def test_incident_severity_level_optional(self):
         """Verifica que el nivel de severidad es opcional."""
@@ -434,8 +426,7 @@ class IncidentModelTest(TestCase):
             incident_status=self.status,
             title='No Severity Test',
             description='Description',
-            latitude=0.0,
-            longitude=0.0,
+            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
             occurred_at=timezone.now()
         )
         self.assertIsNone(incident.severity_level)
