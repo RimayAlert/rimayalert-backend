@@ -38,8 +38,13 @@ class CreateIncidentFeature:
                 title=self.data.get('type'),
                 description=self.data.get('description', ''),
                 address=self.data.get('location', ''),
-                latitude=self.data.get('latitude'),
-                longitude=self.data.get('longitude'),
+                location={
+                    'type': 'Point',
+                    'coordinates': [
+                        self.data.get('longitude'),
+                        self.data.get('latitude')
+                    ]
+                } if self.data.get('latitude') is not None and self.data.get('longitude') is not None else None,
                 is_anonymous=True,
                 occurred_at=timezone.now()
             )
