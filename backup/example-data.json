@@ -1,0 +1,869 @@
+[
+  {
+    "model": "authtoken.token",
+    "pk": "05db5accf13fdfeef541b2a8c0ef7a77b5c1b110",
+    "fields": {
+      "user": 1,
+      "created": "2025-11-06T21:58:52.959Z"
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$R5rClH7aGtuwjOhPkf77FB$AOmy+/t+ZFmtJqUcDKjfJImhwoXGpIR3FutwR21xKP8=",
+      "last_login": "2025-11-06T21:57:33.362Z",
+      "is_superuser": true,
+      "first_name": "Anthony Emiliano",
+      "last_name": "Terán Arellano",
+      "username": "admin",
+      "dni": "1206926832",
+      "email": "admin@rimayalert.com",
+      "is_active": true,
+      "is_staff": true,
+      "date_joined": "2025-10-30T21:13:58Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 2,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Juan",
+      "last_name": "Pérez García",
+      "username": "jperez",
+      "dni": "1234567890",
+      "email": "jperez@example.com",
+      "is_active": true,
+      "is_staff": false,
+      "date_joined": "2025-11-05T22:02:27.136Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 3,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "María",
+      "last_name": "Rodríguez López",
+      "username": "mrodriguez",
+      "dni": "0987654321",
+      "email": "mrodriguez@example.com",
+      "is_active": true,
+      "is_staff": false,
+      "date_joined": "2025-11-05T22:02:27.193Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 4,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Carlos",
+      "last_name": "Gómez Martínez",
+      "username": "cgomez",
+      "dni": "1122334455",
+      "email": "cgomez@example.com",
+      "is_active": true,
+      "is_staff": false,
+      "date_joined": "2025-11-05T22:02:27.243Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 5,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Ana",
+      "last_name": "Sánchez Torres",
+      "username": "asanchez",
+      "dni": "5544332211",
+      "email": "asanchez@example.com",
+      "is_active": true,
+      "is_staff": false,
+      "date_joined": "2025-11-05T22:02:27.301Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 6,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Luis",
+      "last_name": "Fernández Ruiz",
+      "username": "lfernandez",
+      "dni": "9988776655",
+      "email": "lfernandez@example.com",
+      "is_active": true,
+      "is_staff": false,
+      "date_joined": "2025-11-05T22:02:27.360Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 7,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Elena",
+      "last_name": "Morales Vega",
+      "username": "emorales",
+      "dni": "1357924680",
+      "email": "emorales@example.com",
+      "is_active": true,
+      "is_staff": false,
+      "date_joined": "2025-11-06T10:15:30.120Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 8,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Roberto",
+      "last_name": "Díaz Castillo",
+      "username": "rdiaz",
+      "dni": "2468135790",
+      "email": "rdiaz@example.com",
+      "is_active": true,
+      "is_staff": false,
+      "date_joined": "2025-11-06T10:20:45.250Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 9,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Patricia",
+      "last_name": "Ramírez Silva",
+      "username": "pramirez",
+      "dni": "8642097531",
+      "email": "pramirez@example.com",
+      "is_active": true,
+      "is_staff": false,
+      "date_joined": "2025-11-06T10:25:12.380Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 10,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Miguel",
+      "last_name": "Ortiz Navarro",
+      "username": "mortiz",
+      "dni": "3691258470",
+      "email": "mortiz@example.com",
+      "is_active": true,
+      "is_staff": false,
+      "date_joined": "2025-11-06T11:15:20.500Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 11,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Laura",
+      "last_name": "Castro Mendoza",
+      "username": "lcastro",
+      "dni": "7531598426",
+      "email": "lcastro@example.com",
+      "is_active": true,
+      "is_staff": false,
+      "date_joined": "2025-11-06T11:30:45.600Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": 12,
+    "fields": {
+      "password": "",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Fernando",
+      "last_name": "Vargas Flores",
+      "username": "fvargas",
+      "dni": "9517532468",
+      "email": "fvargas@example.com",
+      "is_active": true,
+      "is_staff": false,
+      "date_joined": "2025-11-06T11:45:10.700Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authentication.userprofile",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "bio": "Administrador de la comunidad San Mart�n",
+      "alias_name": "Juanito",
+      "created_at": "2025-11-05T22:03:38.012Z",
+      "updated_at": "2025-11-05T22:03:38.012Z"
+    }
+  },
+  {
+    "model": "authentication.userprofile",
+    "pk": 2,
+    "fields": {
+      "user": 3,
+      "bio": "Moderadora y vecina del sector norte",
+      "alias_name": "Mary",
+      "created_at": "2025-11-05T22:03:38.015Z",
+      "updated_at": "2025-11-05T22:03:38.015Z"
+    }
+  },
+  {
+    "model": "authentication.userprofile",
+    "pk": 3,
+    "fields": {
+      "user": 4,
+      "bio": "Residente desde 2020",
+      "alias_name": "Carlitos",
+      "created_at": "2025-11-05T22:03:38.018Z",
+      "updated_at": "2025-11-05T22:03:38.018Z"
+    }
+  },
+  {
+    "model": "authentication.userprofile",
+    "pk": 4,
+    "fields": {
+      "user": 5,
+      "bio": "Vecina activa en eventos comunitarios",
+      "alias_name": "Anita",
+      "created_at": "2025-11-05T22:03:38.021Z",
+      "updated_at": "2025-11-05T22:03:38.021Z"
+    }
+  },
+  {
+    "model": "authentication.userprofile",
+    "pk": 5,
+    "fields": {
+      "user": 6,
+      "bio": "Encargado de seguridad vecinal",
+      "alias_name": "Lucho",
+      "created_at": "2025-11-05T22:03:38.023Z",
+      "updated_at": "2025-11-05T22:03:38.023Z"
+    }
+  },
+  {
+    "model": "authentication.userprofile",
+    "pk": 6,
+    "fields": {
+      "user": 1,
+      "bio": "Dueño",
+      "alias_name": "Anthony",
+      "created_at": "2025-11-06T21:58:34.829Z",
+      "updated_at": "2025-11-06T21:58:34.829Z"
+    }
+  },
+  {
+    "model": "authentication.userprofile",
+    "pk": 7,
+    "fields": {
+      "user": 7,
+      "bio": "Vecina activa y miembro del comité de seguridad",
+      "alias_name": "Elenita",
+      "created_at": "2025-11-06T10:30:22.100Z",
+      "updated_at": "2025-11-06T10:30:22.100Z"
+    }
+  },
+  {
+    "model": "authentication.userprofile",
+    "pk": 8,
+    "fields": {
+      "user": 8,
+      "bio": "Coordinador de eventos comunitarios",
+      "alias_name": "Beto",
+      "created_at": "2025-11-06T10:35:18.200Z",
+      "updated_at": "2025-11-06T10:35:18.200Z"
+    }
+  },
+  {
+    "model": "authentication.userprofile",
+    "pk": 9,
+    "fields": {
+      "user": 9,
+      "bio": "Responsable de comunicación vecinal",
+      "alias_name": "Paty",
+      "created_at": "2025-11-06T10:40:33.300Z",
+      "updated_at": "2025-11-06T10:40:33.300Z"
+    }
+  },
+  {
+    "model": "authentication.userprofile",
+    "pk": 10,
+    "fields": {
+      "user": 10,
+      "bio": "Encargado de mantenimiento de áreas comunes",
+      "alias_name": "Migue",
+      "created_at": "2025-11-06T11:20:15.400Z",
+      "updated_at": "2025-11-06T11:20:15.400Z"
+    }
+  },
+  {
+    "model": "authentication.userprofile",
+    "pk": 11,
+    "fields": {
+      "user": 11,
+      "bio": "Tesorera de la comunidad",
+      "alias_name": "Laurita",
+      "created_at": "2025-11-06T11:35:22.500Z",
+      "updated_at": "2025-11-06T11:35:22.500Z"
+    }
+  },
+  {
+    "model": "authentication.userprofile",
+    "pk": 12,
+    "fields": {
+      "user": 12,
+      "bio": "Secretario del comité vecinal",
+      "alias_name": "Fer",
+      "created_at": "2025-11-06T11:50:30.600Z",
+      "updated_at": "2025-11-06T11:50:30.600Z"
+    }
+  },
+  {
+    "model": "community.community",
+    "pk": 1,
+    "fields": {
+      "name": "Comunidad San Martín",
+      "description": "Comunidad residencial ubicada en el centro de la ciudad. Vigilancia activa las 24 horas.",
+      "boundary_area": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -78.5024,
+              -0.1807
+            ],
+            [
+              -78.502,
+              -0.1807
+            ],
+            [
+              -78.502,
+              -0.181
+            ],
+            [
+              -78.5024,
+              -0.181
+            ],
+            [
+              -78.5024,
+              -0.1807
+            ]
+          ]
+        ]
+      },
+      "postal_code": "170515",
+      "is_active": true,
+      "created_at": "2025-11-05T22:05:25.709Z",
+      "updated_at": "2025-11-06T22:02:09.122Z"
+    }
+  },
+  {
+    "model": "community.community",
+    "pk": 2,
+    "fields": {
+      "name": "Comunidad Los Jardines",
+      "description": "Comunidad residencial en zona norte. Cuenta con parques y áreas recreativas. Seguridad 24/7.",
+      "boundary_area": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -78.4985,
+              -0.1755
+            ],
+            [
+              -78.4980,
+              -0.1755
+            ],
+            [
+              -78.4980,
+              -0.1760
+            ],
+            [
+              -78.4985,
+              -0.1760
+            ],
+            [
+              -78.4985,
+              -0.1755
+            ]
+          ]
+        ]
+      },
+      "postal_code": "170516",
+      "is_active": true,
+      "created_at": "2025-11-06T14:20:15.500Z",
+      "updated_at": "2025-11-06T14:20:15.500Z"
+    }
+  },
+  {
+    "model": "community.community",
+    "pk": 3,
+    "fields": {
+      "name": "Comunidad El Bosque",
+      "description": "Comunidad residencial en zona sur con amplias áreas verdes. Cuenta con vigilancia privada y control de acceso.",
+      "boundary_area": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -78.5100,
+              -0.1900
+            ],
+            [
+              -78.5095,
+              -0.1900
+            ],
+            [
+              -78.5095,
+              -0.1905
+            ],
+            [
+              -78.5100,
+              -0.1905
+            ],
+            [
+              -78.5100,
+              -0.1900
+            ]
+          ]
+        ]
+      },
+      "postal_code": "170517",
+      "is_active": true,
+      "created_at": "2025-11-06T16:45:30.800Z",
+      "updated_at": "2025-11-06T16:45:30.800Z"
+    }
+  },
+  {
+    "model": "community.communitymembership",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "community": 1,
+      "role": "admin",
+      "is_verified": true,
+      "joined_at": "2025-11-05T22:03:38.014Z"
+    }
+  },
+  {
+    "model": "community.communitymembership",
+    "pk": 2,
+    "fields": {
+      "user": 3,
+      "community": 1,
+      "role": "moderator",
+      "is_verified": true,
+      "joined_at": "2025-11-05T22:03:38.017Z"
+    }
+  },
+  {
+    "model": "community.communitymembership",
+    "pk": 3,
+    "fields": {
+      "user": 4,
+      "community": 1,
+      "role": "member",
+      "is_verified": true,
+      "joined_at": "2025-11-05T22:03:38.020Z"
+    }
+  },
+  {
+    "model": "community.communitymembership",
+    "pk": 4,
+    "fields": {
+      "user": 5,
+      "community": 1,
+      "role": "member",
+      "is_verified": true,
+      "joined_at": "2025-11-05T22:03:38.022Z"
+    }
+  },
+  {
+    "model": "community.communitymembership",
+    "pk": 5,
+    "fields": {
+      "user": 6,
+      "community": 1,
+      "role": "member",
+      "is_verified": true,
+      "joined_at": "2025-11-05T22:03:38.024Z"
+    }
+  },
+  {
+    "model": "community.communitymembership",
+    "pk": 6,
+    "fields": {
+      "user": 7,
+      "community": 2,
+      "role": "admin",
+      "is_verified": true,
+      "joined_at": "2025-11-06T14:25:10.100Z"
+    }
+  },
+  {
+    "model": "community.communitymembership",
+    "pk": 7,
+    "fields": {
+      "user": 8,
+      "community": 2,
+      "role": "moderator",
+      "is_verified": true,
+      "joined_at": "2025-11-06T14:30:22.200Z"
+    }
+  },
+  {
+    "model": "community.communitymembership",
+    "pk": 8,
+    "fields": {
+      "user": 9,
+      "community": 2,
+      "role": "member",
+      "is_verified": true,
+      "joined_at": "2025-11-06T14:35:45.300Z"
+    }
+  },
+  {
+    "model": "community.communitymembership",
+    "pk": 9,
+    "fields": {
+      "user": 10,
+      "community": 3,
+      "role": "admin",
+      "is_verified": true,
+      "joined_at": "2025-11-06T16:50:10.700Z"
+    }
+  },
+  {
+    "model": "community.communitymembership",
+    "pk": 10,
+    "fields": {
+      "user": 11,
+      "community": 3,
+      "role": "moderator",
+      "is_verified": true,
+      "joined_at": "2025-11-06T16:55:20.800Z"
+    }
+  },
+  {
+    "model": "community.communitymembership",
+    "pk": 11,
+    "fields": {
+      "user": 12,
+      "community": 3,
+      "role": "member",
+      "is_verified": true,
+      "joined_at": "2025-11-06T17:00:30.900Z"
+    }
+  },
+  {
+    "model": "incident.incidenttype",
+    "pk": 1,
+    "fields": {
+      "name": "Robo",
+      "code": "003",
+      "description": "Robo",
+      "icon": "fa-solid fa-mask",
+      "color_hex": "#dc3545",
+      "default_severity": 4,
+      "requires_authority": true
+    }
+  },
+  {
+    "model": "incident.incidenttype",
+    "pk": 2,
+    "fields": {
+      "name": "Vandalismo",
+      "code": "004",
+      "description": "Actos de vandalismo y daño a propiedad",
+      "icon": "fa-solid fa-spray-can",
+      "color_hex": "#6f42c1",
+      "default_severity": 3,
+      "requires_authority": true
+    }
+  },
+  {
+    "model": "incident.incidenttype",
+    "pk": 3,
+    "fields": {
+      "name": "Sospechoso",
+      "code": "005",
+      "description": "Actividad sospechosa",
+      "icon": "fa-solid fa-user-secret",
+      "color_hex": "#fd7e14",
+      "default_severity": 2,
+      "requires_authority": false
+    }
+  },
+  {
+    "model": "incident.incidenttype",
+    "pk": 4,
+    "fields": {
+      "name": "Accidente",
+      "code": "006",
+      "description": "Accidente vehicular o personal",
+      "icon": "fa-solid fa-car-burst",
+      "color_hex": "#ffc107",
+      "default_severity": 3,
+      "requires_authority": true
+    }
+  },
+  {
+    "model": "incident.incidentstatus",
+    "pk": 1,
+    "fields": {
+      "name": "Pendiente",
+      "code": "001",
+      "description": "Pendiente"
+    }
+  },
+  {
+    "model": "incident.incidentstatus",
+    "pk": 2,
+    "fields": {
+      "name": "En Proceso",
+      "code": "002",
+      "description": "En proceso de resolución"
+    }
+  },
+  {
+    "model": "incident.incidentstatus",
+    "pk": 3,
+    "fields": {
+      "name": "Resuelto",
+      "code": "003",
+      "description": "Incidente resuelto"
+    }
+  },
+  {
+    "model": "incident.incident",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-10-30T21:23:59.805Z",
+      "updated_at": "2025-10-30T21:23:59.805Z",
+      "reported_by_user": 1,
+      "incident_type": 1,
+      "incident_status": 1,
+      "title": "Robo a mano armada",
+      "description": "Robo a mano armada",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          -79.045,
+          -0.217
+        ]
+      },
+      "address": "Jaime Roldos y Gran colombia",
+      "is_anonymous": true,
+      "severity_level": 4,
+      "is_active": true,
+      "occurred_at": "2025-10-30T21:23:27Z",
+      "reported_at": "2025-10-30T21:23:28Z"
+    }
+  },
+  {
+    "model": "incident.incident",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-11-06T08:15:30.000Z",
+      "updated_at": "2025-11-06T08:15:30.000Z",
+      "reported_by_user": 2,
+      "incident_type": 2,
+      "incident_status": 1,
+      "title": "Grafitis en muro perimetral",
+      "description": "Se encontraron grafitis en el muro perimetral de la comunidad San Martín, lado este",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          -78.5022,
+          -0.1808
+        ]
+      },
+      "address": "Muro perimetral este, Comunidad San Martín",
+      "is_anonymous": false,
+      "severity_level": 3,
+      "is_active": true,
+      "occurred_at": "2025-11-06T07:30:00Z",
+      "reported_at": "2025-11-06T08:15:30Z"
+    }
+  },
+  {
+    "model": "incident.incident",
+    "pk": 3,
+    "fields": {
+      "created_at": "2025-11-06T12:40:15.000Z",
+      "updated_at": "2025-11-06T12:40:15.000Z",
+      "reported_by_user": 3,
+      "incident_type": 3,
+      "incident_status": 2,
+      "title": "Persona sospechosa merodeando",
+      "description": "Se observó una persona desconocida merodeando cerca de las viviendas en horas de la tarde",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          -78.5021,
+          -0.1809
+        ]
+      },
+      "address": "Calle Principal, Comunidad San Martín",
+      "is_anonymous": false,
+      "severity_level": 2,
+      "is_active": true,
+      "occurred_at": "2025-11-06T12:00:00Z",
+      "reported_at": "2025-11-06T12:40:15Z"
+    }
+  },
+  {
+    "model": "incident.incident",
+    "pk": 4,
+    "fields": {
+      "created_at": "2025-11-06T15:20:45.000Z",
+      "updated_at": "2025-11-06T15:20:45.000Z",
+      "reported_by_user": 7,
+      "incident_type": 4,
+      "incident_status": 3,
+      "title": "Choque vehicular menor",
+      "description": "Accidente vehicular leve en el estacionamiento, sin heridos. Vehículos ya fueron movidos",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          -78.4982,
+          -0.1757
+        ]
+      },
+      "address": "Estacionamiento comunitario, Los Jardines",
+      "is_anonymous": false,
+      "severity_level": 2,
+      "is_active": true,
+      "occurred_at": "2025-11-06T15:00:00Z",
+      "reported_at": "2025-11-06T15:20:45Z"
+    }
+  },
+  {
+    "model": "incident.incident",
+    "pk": 5,
+    "fields": {
+      "created_at": "2025-11-06T18:30:22.000Z",
+      "updated_at": "2025-11-06T18:30:22.000Z",
+      "reported_by_user": 5,
+      "incident_type": 1,
+      "incident_status": 1,
+      "title": "Intento de robo a vehículo",
+      "description": "Se encontró un vehículo con la ventana rota y señales de intento de robo en el área de parqueo",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          -78.5023,
+          -0.1808
+        ]
+      },
+      "address": "Zona de parqueo B, Comunidad San Martín",
+      "is_anonymous": false,
+      "severity_level": 4,
+      "is_active": true,
+      "occurred_at": "2025-11-06T17:45:00Z",
+      "reported_at": "2025-11-06T18:30:22Z"
+    }
+  },
+  {
+    "model": "incident.incident",
+    "pk": 6,
+    "fields": {
+      "created_at": "2025-11-06T20:10:33.000Z",
+      "updated_at": "2025-11-06T20:10:33.000Z",
+      "reported_by_user": 8,
+      "incident_type": 3,
+      "incident_status": 1,
+      "title": "Vehículo desconocido estacionado",
+      "description": "Vehículo sin placas visible estacionado hace más de 2 horas frente al área recreativa",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          -78.4983,
+          -0.1758
+        ]
+      },
+      "address": "Frente al área recreativa, Los Jardines",
+      "is_anonymous": true,
+      "severity_level": 2,
+      "is_active": true,
+      "occurred_at": "2025-11-06T18:00:00Z",
+      "reported_at": "2025-11-06T20:10:33Z"
+    }
+  },
+  {
+    "model": "incident.incident",
+    "pk": 7,
+    "fields": {
+      "created_at": "2025-11-06T22:45:18.000Z",
+      "updated_at": "2025-11-06T22:45:18.000Z",
+      "reported_by_user": 9,
+      "incident_type": 2,
+      "incident_status": 1,
+      "title": "Daños en área de juegos infantiles",
+      "description": "Se encontraron los columpios y tobogán del área de juegos con daños intencionales",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          -78.4981,
+          -0.1759
+        ]
+      },
+      "address": "Área de juegos infantiles, Los Jardines",
+      "is_anonymous": false,
+      "severity_level": 3,
+      "is_active": true,
+      "occurred_at": "2025-11-06T21:00:00Z",
+      "reported_at": "2025-11-06T22:45:18Z"
+    }
+  }
+]

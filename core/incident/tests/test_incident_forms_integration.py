@@ -56,8 +56,7 @@ class IncidentViewIntegrationTest(TestCase):
                 incident_status=cls.status_pending if i % 2 == 0 else cls.status_resolved,
                 title=f'Incidente de Prueba {i}',
                 description=f'Descripción del incidente {i}',
-                latitude=float(i),
-                longitude=float(i),
+                location={'type': 'Point', 'coordinates': [float(i), float(i)]},
                 address=f'Calle Prueba {i}',
                 severity_level=i + 1,
                 occurred_at=now - timedelta(hours=i),
@@ -220,8 +219,7 @@ class IncidentViewQueryOptimizationTest(TestCase):
                 incident_status=cls.status,
                 title=f'Query Test {i}',
                 description='Test',
-                latitude=0.0,
-                longitude=0.0,
+                location={'type': 'Point', 'coordinates': [0.0, 0.0]},
                 occurred_at=now
             )
 
@@ -329,8 +327,7 @@ class IncidentRelationshipsTest(TestCase):
             incident_status=self.status1,
             title='User 1 Incident',
             description='Test',
-            latitude=0.0,
-            longitude=0.0,
+            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
             occurred_at=timezone.now()
         )
 
@@ -340,8 +337,7 @@ class IncidentRelationshipsTest(TestCase):
             incident_status=self.status1,
             title='User 2 Incident',
             description='Test',
-            latitude=0.0,
-            longitude=0.0,
+            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
             occurred_at=timezone.now()
         )
 
@@ -356,8 +352,7 @@ class IncidentRelationshipsTest(TestCase):
                 incident_status=self.status1,
                 title=f'Community Incident {i}',
                 description='Test',
-                latitude=0.0,
-                longitude=0.0,
+                location={'type': 'Point', 'coordinates': [0.0, 0.0]},
                 occurred_at=timezone.now()
             )
 
@@ -372,8 +367,7 @@ class IncidentRelationshipsTest(TestCase):
             incident_status=self.status1,
             title='Protected Type Test',
             description='Test',
-            latitude=0.0,
-            longitude=0.0,
+            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
             occurred_at=timezone.now()
         )
 
@@ -389,8 +383,7 @@ class IncidentRelationshipsTest(TestCase):
             incident_status=self.status1,
             title='Protected Status Test',
             description='Test',
-            latitude=0.0,
-            longitude=0.0,
+            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
             occurred_at=timezone.now()
         )
 
@@ -406,8 +399,7 @@ class IncidentRelationshipsTest(TestCase):
             incident_status=self.status1,
             title='User Cascade Test',
             description='Test',
-            latitude=0.0,
-            longitude=0.0,
+            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
             occurred_at=timezone.now()
         )
 
@@ -428,8 +420,7 @@ class IncidentRelationshipsTest(TestCase):
             incident_status=self.status1,
             title='Community Cascade Test',
             description='Test',
-            latitude=0.0,
-            longitude=0.0,
+            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
             occurred_at=timezone.now()
         )
 

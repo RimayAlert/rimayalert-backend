@@ -1,0 +1,2 @@
+# Templatetags module for dashboard
+

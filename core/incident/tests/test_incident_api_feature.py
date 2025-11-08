@@ -22,7 +22,7 @@ class CreateIncidentFeatureTest(TestCase):
         )
         
         self.incident_data = {
-            'type': 'Accidente de tránsito',
+            'type': 'Robo',
             'description': 'Choque en la intersección',
             'location': 'Av. Principal y Calle 5',
             'latitude': -12.0464,
@@ -39,11 +39,13 @@ class CreateIncidentFeatureTest(TestCase):
         incident = feature.save_incident()
         
         self.assertIsNotNone(incident)
-        self.assertEqual(incident.title, 'Accidente de tránsito')
+        self.assertEqual(incident.title, 'Robo')
         self.assertEqual(incident.description, 'Choque en la intersección')
         self.assertEqual(incident.address, 'Av. Principal y Calle 5')
-        self.assertEqual(incident.latitude, -12.0464)
-        self.assertEqual(incident.longitude, -77.0428)
+        # Verificar formato GeoJSON Point compatible con Leaflet
+        self.assertIsNotNone(incident.location)
+        self.assertEqual(incident.location['type'], 'Point')
+        self.assertEqual(incident.location['coordinates'], [-77.0428, -12.0464])
         self.assertEqual(incident.reported_by_user, self.user)
         self.assertTrue(incident.is_anonymous)
 
@@ -58,15 +60,15 @@ class CreateIncidentFeatureTest(TestCase):
         incident = feature.save_incident()
         
         self.assertEqual(IncidentType.objects.count(), initial_count + 1)
-        self.assertEqual(incident.incident_type.name, 'Accidente de tránsito')
-        self.assertEqual(incident.incident_type.code, 'accidente_de_tránsito')
+        self.assertEqual(incident.incident_type.name, 'Robo')
+        self.assertEqual(incident.incident_type.code, 'robo')
 
     def test_save_incident_reuses_existing_incident_type(self):
         """Prueba que reutiliza un tipo de incidente existente"""
         # Crear tipo de incidente previamente
         existing_type = IncidentType.objects.create(
-            name='Accidente de tránsito',
-            code='accidente_transito',
+            name='Robo',
+            code='robo',
             description='Tipo existente'
         )
         
@@ -155,6 +157,10 @@ class CreateIncidentFeatureTest(TestCase):
         self.assertEqual(incident.title, 'Robo')
         self.assertEqual(incident.description, '')
         self.assertEqual(incident.address, '')
+        # Verificar formato GeoJSON Point
+        self.assertIsNotNone(incident.location)
+        self.assertEqual(incident.location['type'], 'Point')
+        self.assertEqual(incident.location['coordinates'], [-77.0428, -12.0464])
 
     @patch('core.incident.api.incident.feature.incident.logger')
     def test_save_incident_logs_info_messages(self, mock_logger):
