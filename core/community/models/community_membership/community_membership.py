@@ -14,6 +14,7 @@ class CommunityMembership(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name="c_memberships_by_user",
         verbose_name="Perfil de usuario",
     )
     community = models.ForeignKey(

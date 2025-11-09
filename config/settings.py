@@ -61,7 +61,8 @@ INSTALLED_APPS = [
     'core.dashboard',
     'core.community',
     'core.incident',
-    'core.shared'
+    'core.shared',
+    'core.stats'
 ]
 
 SITE_ID = 1
@@ -147,12 +148,12 @@ AUTHENTICATION_BACKENDS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ]
 }
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
