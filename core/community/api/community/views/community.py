@@ -23,5 +23,4 @@ class AssignCommunityUser(APIView):
     def post(self, request):
         data = self.request.data
         print(data)
-
         return Response(status=status.HTTP_200_OK)
