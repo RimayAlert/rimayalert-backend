@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.gis.db import models as gis_models
 
 from core.authentication.models import User
 from core.incident.models.incident_status.incident_status import IncidentStatus
@@ -13,7 +14,7 @@ class Incident(BaseModel):
     incident_status = models.ForeignKey(IncidentStatus, on_delete=models.PROTECT, verbose_name="Estado")
     title = models.CharField(max_length=200, verbose_name="Título")
     description = models.TextField(verbose_name="Descripción")
-    location = models.JSONField(blank=True, null=True, verbose_name="Ubicación")
+    location = gis_models.PointField(srid=4326, blank=True, null=True, verbose_name="Ubicación")
     address = models.CharField(max_length=255, blank=True, null=True, verbose_name="Dirección")
     is_anonymous = models.BooleanField(default=False, verbose_name="Anónimo")
     severity_level = models.IntegerField(blank=True, null=True, verbose_name="Nivel de severidad")

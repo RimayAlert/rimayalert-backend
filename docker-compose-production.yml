@@ -1,0 +1,57 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: DockerfileProduction
+    container_name: prod_django
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    restart: on-failure:3
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+             python manage.py migrate &&
+             gunicorn --bind 0.0.0.0:8000 --workers 3 config.wsgi:application"
+
+  db:
+    image: postgis/postgis:15-3.3
+    container_name: prod_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  nginx:
+    image: nginx:alpine
+    container_name: prod_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - static_volume:/static
+      - media_volume:/media
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - web
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

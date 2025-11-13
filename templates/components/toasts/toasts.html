@@ -1,0 +1,123 @@
+{% if messages %}
+    <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 11000;">
+        {% for message in messages %}
+            <div class="toast align-items-center border-0 mb-2
+                {% if message.tags == 'success' %}bg-success text-white{% endif %}
+                {% if message.tags == 'error' %}bg-danger text-white{% endif %}
+                {% if message.tags == 'warning' %}bg-warning text-dark{% endif %}
+                {% if message.tags == 'info' %}bg-info text-white{% endif %}
+                {% if not message.tags or message.tags == 'debug' %}bg-secondary text-white{% endif %}"
+                 role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true"
+                 data-bs-autohide="true"
+                 data-bs-delay="5000"
+                 data-toast-id="toast-{{ forloop.counter }}">
+
+                <div class="d-flex">
+                    <div class="toast-body d-flex align-items-start w-100">
+                        <div class="me-3">
+                            {% if message.tags == 'success' %}
+                                <i class="fas fa-check-circle fa-lg"></i>
+                            {% elif message.tags == 'error' %}
+                                <i class="fas fa-exclamation-circle fa-lg"></i>
+                            {% elif message.tags == 'warning' %}
+                                <i class="fas fa-exclamation-triangle fa-lg"></i>
+                            {% elif message.tags == 'info' %}
+                                <i class="fas fa-info-circle fa-lg"></i>
+                            {% else %}
+                                <i class="fas fa-bell fa-lg"></i>
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1">
+                            <strong class="d-block mb-1">
+                                {% if message.tags == 'success' %}Éxito{% endif %}
+                                {% if message.tags == 'error' %}Error{% endif %}
+                                {% if message.tags == 'warning' %}Advertencia{% endif %}
+                                {% if message.tags == 'info' %}Información{% endif %}
+                                {% if not message.tags or message.tags == 'debug' %}Notificación{% endif %}
+                            </strong>
+                            <div>{{ message|safe }}</div>
+                        </div>
+                    </div>
+                    <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast"
+                            aria-label="Close"
+                            {% if message.tags == 'warning' %}style="filter: invert(1);"{% endif %}>
+                    </button>
+                </div>
+
+                <!-- Progress bar -->
+                <div class="position-relative" style="height: 4px; overflow: hidden;">
+                    <div class="progress-bar-custom position-absolute bottom-0 start-0 h-100
+                        {% if message.tags == 'warning' %}bg-dark{% else %}bg-white{% endif %}"
+                        style="width: 100%; opacity: 0.4;"></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toastElList = document.querySelectorAll('.toast');
+
+            toastElList.forEach((toastEl, index) => {
+                // Inicializar toast de Bootstrap
+                const bsToast = new bootstrap.Toast(toastEl, {
+                    autohide: true,
+                    delay: 5000
+                });
+
+                // Mostrar con un pequeño delay para efecto escalonado
+                setTimeout(() => {
+                    bsToast.show();
+                    startProgressBar(toastEl);
+                }, index * 100);
+
+                // Pausar progress bar al hacer hover
+                toastEl.addEventListener('mouseenter', function() {
+                    const progressBar = toastEl.querySelector('.progress-bar-custom');
+                    if (progressBar) {
+                        progressBar.style.animationPlayState = 'paused';
+                    }
+                });
+
+                // Reanudar progress bar al quitar hover
+                toastEl.addEventListener('mouseleave', function() {
+                    const progressBar = toastEl.querySelector('.progress-bar-custom');
+                    if (progressBar) {
+                        progressBar.style.animationPlayState = 'running';
+                    }
+                });
+            });
+        });
+
+        function startProgressBar(toastEl) {
+            const progressBar = toastEl.querySelector('.progress-bar-custom');
+            if (progressBar) {
+                progressBar.style.transition = 'width 5000ms linear';
+                setTimeout(() => {
+                    progressBar.style.width = '0%';
+                }, 50);
+            }
+        }
+    </script>
+
+    <style>
+        .toast {
+            min-width: 300px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .progress-bar-custom {
+            transition: width 5000ms linear;
+        }
+
+        @media (max-width: 576px) {
+            .toast {
+                min-width: 280px;
+            }
+        }
+    </style>
+{% endif %}

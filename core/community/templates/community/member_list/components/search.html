@@ -20,7 +20,7 @@
                     <label class="form-label d-block">&nbsp;</label>
                     <div class="d-flex gap-2">
                         {% include 'components/button/button.html' with type="submit" text="Buscar" icon="bi bi-search" style="primary" class="flex-grow-1" %}
-                        <a href="{% url 'community:community_members' community.pk %}" class="btn btn-outline-secondary"
+                        <a href="{% url 'community:community_members' %}" class="btn btn-outline-secondary"
                            title="Limpiar filtros">
                             <i class="fa-solid fa-x"></i>
                         </a>

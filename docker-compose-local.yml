@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgis/postgis:15-3.3
+    container_name: dev_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 10
+    restart: always
+
+  web:
+    build:
+      context: .
+      dockerfile: DockerfileLocal
+    container_name: dev_django
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    volumes:
+      - .:/app
+    command: python manage.py runserver 0.0.0.0:8000
+    restart: on-failure
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: dev_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

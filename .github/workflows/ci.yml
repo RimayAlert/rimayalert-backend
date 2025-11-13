@@ -71,7 +71,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/django-app:latest .
+          docker build -f DockerfileProduction -t ${{ secrets.DOCKER_USERNAME }}/django-app:latest .
 
       - name: Push Docker image to DockerHub
         run: |

@@ -21,3 +21,5 @@ requests==2.32.4
 sqlparse==0.5.3
 tzdata==2025.2
 urllib3==2.5.0
+GDAL==3.10.0
+gunicorn==22.0.0
