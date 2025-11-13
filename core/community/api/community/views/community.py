@@ -33,13 +33,20 @@ class AssignCommunityUser(APIView):
         latitude = data.get('latitude')
         longitude = data.get('longitude')
 
-        if not latitude or not longitude:
+        # Aceptar 0.0 como válido; sólo rechazar si es None
+        if latitude is None or longitude is None:
             return Response(
                 {"error": "latitude y longitude son requeridos"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        point = Point(float(longitude), float(latitude), srid=4326)
+        try:
+            point = Point(float(longitude), float(latitude), srid=4326)
+        except (TypeError, ValueError):
+            return Response(
+                {"error": "latitude y longitude deben ser numéricos"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         community = Community.objects.filter(
             boundary_area__contains=point,
