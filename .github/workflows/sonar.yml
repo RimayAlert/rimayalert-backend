@@ -48,7 +48,10 @@ jobs:
       - name: Install system dependencies for GDAL and PostGIS
         run: |
           sudo apt-get update
+          sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable || true
+          sudo apt-get update
           sudo apt-get install -y gdal-bin libgdal-dev python3-gdal binutils libproj-dev
+          gdalinfo --version || true
 
       - name: Install dependencies
         run: |
@@ -57,12 +60,10 @@ jobs:
 
       - name: Run migrations
         run: |
-          python manage.py makemigrations
-          python manage.py migrate
+          python manage.py migrate --noinput
 
       - name: Run tests with coverage
         run: |
-            cd $GITHUB_WORKSPACE
             coverage run --rcfile=.coveragerc manage.py test
             coverage xml -o coverage.xml
 
