@@ -1,5 +1,6 @@
 import logging
 from django.utils import timezone
+from django.contrib.gis.geos import Point
 
 from core.incident.models import IncidentMedia, Incident, IncidentType, IncidentStatus
 
@@ -31,6 +32,15 @@ class CreateIncidentFeature:
             )
             logger.info(f"Estado: {incident_status.name} - {'Creado' if created else 'Existente'}")
 
+            latitude = self.data.get('latitude')
+            longitude = self.data.get('longitude')
+            point = None
+            if latitude is not None and longitude is not None:
+                try:
+                    point = Point(float(longitude), float(latitude), srid=4326)
+                except (TypeError, ValueError):
+                    logger.warning("Coordenadas inválidas, se ignorará location")
+
             incident = Incident.objects.create(
                 reported_by_user=self.user,
                 incident_type=incident_type,
@@ -38,13 +48,7 @@ class CreateIncidentFeature:
                 title=self.data.get('type'),
                 description=self.data.get('description', ''),
                 address=self.data.get('location', ''),
-                location={
-                    'type': 'Point',
-                    'coordinates': [
-                        self.data.get('longitude'),
-                        self.data.get('latitude')
-                    ]
-                } if self.data.get('latitude') is not None and self.data.get('longitude') is not None else None,
+                location=point,
                 is_anonymous=True,
                 occurred_at=timezone.now()
             )

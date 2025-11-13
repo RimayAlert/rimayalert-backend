@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIRequestFactory, force_authenticate
 from rest_framework import status
+from django.contrib.gis.geos import Point
 
 from core.incident.api.incident.views.incident import RegisterIncidentApiView
 from core.incident.models import Incident
@@ -252,8 +253,9 @@ class RegisterIncidentApiViewTest(TestCase):
 
         # Verificar que existe un incidente con ese ID
         incident_id = response.data['incident_id']
-        incident_exists = Incident.objects.filter(id=incident_id).exists()
-        self.assertTrue(incident_exists)
+        incident = Incident.objects.get(id=incident_id)
+        if incident.location:
+            self.assertIsInstance(incident.location, Point)
 
     @patch('core.incident.api.incident.views.incident.logger')
     def test_post_logs_warning_when_no_data_field(self, mock_logger):
@@ -290,4 +292,3 @@ class RegisterIncidentApiViewTest(TestCase):
             response = self.view(request)
 
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
