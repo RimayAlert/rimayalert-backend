@@ -1,7 +1,7 @@
 services:
   db:
     image: postgis/postgis:15-3.3
-    container_name: dev_postgres
+    container_name: database
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -21,7 +21,7 @@ services:
     build:
       context: .
       dockerfile: DockerfileLocal
-    container_name: dev_django
+    container_name: app
     env_file: .env
     ports:
       - "8000:8000"
@@ -41,7 +41,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: dev_pgadmin
+    container_name: database_admin
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}

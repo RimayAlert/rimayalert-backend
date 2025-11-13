@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: DockerfileProduction
-    container_name: prod_django
+    container_name: app
     env_file: .env
     depends_on:
       db:
@@ -33,7 +33,7 @@ services:
 
   db:
     image: postgis/postgis:15-3.3
-    container_name: prod_postgres
+    container_name: database
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -51,7 +51,7 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: prod_nginx
+    container_name: proxy
     ports:
       - "80:80"
     volumes:
