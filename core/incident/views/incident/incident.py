@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.views.generic import ListView, DetailView
 
 from core.incident.models import Incident
@@ -45,3 +46,8 @@ class IncidentDetailView(DetailView):
             'incident_status',
             'reported_by_user',
         )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['GOOGLE_MAPS_API_KEY'] = settings.GOOGLE_MAPS_API_KEY
+        return context

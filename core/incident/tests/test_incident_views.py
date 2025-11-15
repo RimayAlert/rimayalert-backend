@@ -10,6 +10,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils import timezone
 from datetime import timedelta
+from django.contrib.gis.geos import Point
 
 from core.authentication.models import User
 from core.community.models import Community
@@ -69,7 +70,7 @@ class IncidentListViewTest(TestCase):
             incident_status=cls.status_open,
             title='Incidente de Robo 1',
             description='Descripción del robo 1',
-            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
+            location=Point(0.0, 0.0, srid=4326),
             address='Calle Principal 123',
             severity_level=5,
             occurred_at=now - timedelta(hours=2),
@@ -82,7 +83,7 @@ class IncidentListViewTest(TestCase):
             incident_status=cls.status_closed,
             title='Incidente de Accidente 1',
             description='Descripción del accidente 1',
-            location={'type': 'Point', 'coordinates': [0.1, 0.1]},
+            location=Point(0.1, 0.1, srid=4326),
             address='Calle Secundaria 456',
             severity_level=3,
             occurred_at=now - timedelta(hours=5),
@@ -95,7 +96,7 @@ class IncidentListViewTest(TestCase):
             incident_status=cls.status_closed,
             title='Incidente de Robo 2',
             description='Descripción del robo 2',
-            location={'type': 'Point', 'coordinates': [0.2, 0.2]},
+            location=Point(0.2, 0.2, srid=4326),
             address='Calle Terciaria 789',
             severity_level=7,
             occurred_at=now - timedelta(hours=10),
@@ -207,7 +208,7 @@ class IncidentDetailViewTest(TestCase):
             incident_status=cls.status,
             title='Emergencia Médica Test',
             description='Descripción de la emergencia médica',
-            location={'type': 'Point', 'coordinates': [-73.2, 5.5]},
+            location=Point(-73.2, 5.5, srid=4326),
             address='Hospital Central, Cra 50 #10-50',
             severity_level=9,
             occurred_at=now - timedelta(hours=1),
@@ -357,7 +358,7 @@ class IncidentModelTest(TestCase):
             incident_status=self.status,
             title='Test Incendio',
             description='Descripción de incendio',
-            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
+            location=Point(0.0, 0.0, srid=4326),
             occurred_at=timezone.now()
         )
         self.assertIsNotNone(incident.id)
@@ -371,7 +372,7 @@ class IncidentModelTest(TestCase):
             incident_status=self.status,
             title='String Test Incendio',
             description='Description',
-            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
+            location=Point(0.0, 0.0, srid=4326),
             occurred_at=timezone.now()
         )
         self.assertEqual(str(incident), 'String Test Incendio')
@@ -384,7 +385,7 @@ class IncidentModelTest(TestCase):
             incident_status=self.status,
             title='Anonymous Test',
             description='Description',
-            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
+            location=Point(0.0, 0.0, srid=4326),
             is_anonymous=True,
             occurred_at=timezone.now()
         )
@@ -398,7 +399,7 @@ class IncidentModelTest(TestCase):
             incident_status=self.status,
             title='Active Test',
             description='Description',
-            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
+            location=Point(0.0, 0.0, srid=4326),
             occurred_at=timezone.now()
         )
         self.assertTrue(incident.is_active)
@@ -411,12 +412,12 @@ class IncidentModelTest(TestCase):
             incident_status=self.status,
             title='Location Test',
             description='Description',
-            location={'type': 'Point', 'coordinates': [-75.5, 10.5]},
+            location=Point(-75.5, 10.5, srid=4326),
             occurred_at=timezone.now()
         )
         self.assertIsNotNone(incident.location)
-        self.assertEqual(incident.location['type'], 'Point')
-        self.assertEqual(incident.location['coordinates'], [-75.5, 10.5])
+        self.assertEqual(incident.location.x, -75.5)
+        self.assertEqual(incident.location.y, 10.5)
 
     def test_incident_severity_level_optional(self):
         """Verifica que el nivel de severidad es opcional."""
@@ -426,8 +427,7 @@ class IncidentModelTest(TestCase):
             incident_status=self.status,
             title='No Severity Test',
             description='Description',
-            location={'type': 'Point', 'coordinates': [0.0, 0.0]},
+            location=Point(0.0, 0.0, srid=4326),
             occurred_at=timezone.now()
         )
         self.assertIsNone(incident.severity_level)
-

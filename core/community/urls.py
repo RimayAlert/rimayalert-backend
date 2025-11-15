@@ -1,13 +1,17 @@
 from django.urls import path, include
 
-from core.community.views.community.community import CommunityListView, CommunityDetailView, CommunityMemberListView
+from core.community.views.community.community import (
+    CommunityDetailView,
+    CommunityMemberListView,
+    VerifyMemberView
+)
 
 app_name = 'community'
 
 urlpatterns = [
-    path('', CommunityListView.as_view(), name='community_list'),
-    path('<int:pk>/', CommunityDetailView.as_view(), name='community_detail'),
-    path('<int:pk>/members/', CommunityMemberListView.as_view(), name='community_members'),
+    path('', CommunityDetailView.as_view(), name='community_detail'),
+    path('members/', CommunityMemberListView.as_view(), name='community_members'),
+    path('members/<int:pk>/verify/', VerifyMemberView.as_view(), name='verify_member'),
 
     #     API
     path('api/', include('core.community.api.urls')),

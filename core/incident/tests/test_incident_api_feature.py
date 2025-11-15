@@ -3,6 +3,7 @@ from unittest.mock import patch, MagicMock
 from django.test import TestCase
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.contrib.gis.geos import Point
 
 from core.incident.api.incident.feature.incident import CreateIncidentFeature
 from core.incident.models import IncidentType, IncidentMedia
@@ -44,8 +45,9 @@ class CreateIncidentFeatureTest(TestCase):
         self.assertEqual(incident.address, 'Av. Principal y Calle 5')
         # Verificar formato GeoJSON Point compatible con Leaflet
         self.assertIsNotNone(incident.location)
-        self.assertEqual(incident.location['type'], 'Point')
-        self.assertEqual(incident.location['coordinates'], [-77.0428, -12.0464])
+        self.assertIsInstance(incident.location, Point)
+        self.assertEqual(incident.location.x, -77.0428)
+        self.assertEqual(incident.location.y, -12.0464)
         self.assertEqual(incident.reported_by_user, self.user)
         self.assertTrue(incident.is_anonymous)
 
@@ -159,8 +161,9 @@ class CreateIncidentFeatureTest(TestCase):
         self.assertEqual(incident.address, '')
         # Verificar formato GeoJSON Point
         self.assertIsNotNone(incident.location)
-        self.assertEqual(incident.location['type'], 'Point')
-        self.assertEqual(incident.location['coordinates'], [-77.0428, -12.0464])
+        self.assertIsInstance(incident.location, Point)
+        self.assertEqual(incident.location.x, -77.0428)
+        self.assertEqual(incident.location.y, -12.0464)
 
     @patch('core.incident.api.incident.feature.incident.logger')
     def test_save_incident_logs_info_messages(self, mock_logger):
@@ -235,4 +238,3 @@ class CreateIncidentFeatureTest(TestCase):
         # Verificar que la fecha es reciente (dentro de los últimos 5 segundos)
         time_diff = timezone.now() - incident.occurred_at
         self.assertLess(time_diff.total_seconds(), 5)
-

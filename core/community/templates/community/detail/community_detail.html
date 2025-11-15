@@ -1,16 +1,14 @@
 {% extends "layouts/base_dashboard.html" %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 {% endblock extra_css %}
 
 {% block content %}
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="mb-0">Detalle de la Comunidad</h2>
-            <a href="{% url 'community:community_list' %}" class="btn btn-outline-primary btn-sm">
-                <i class="fa-solid fa-arrow-left"></i> Regresar al listado
+            <a href="{% url 'dashboard:dashboard' %}" class="btn btn-outline-primary btn-sm">
+                <i class="fa-solid fa-arrow-left"></i> Regresar
             </a>
         </div>
 
@@ -103,10 +101,7 @@
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="d-flex gap-2 justify-content-end">
-                            <a href="{% url 'community:community_list' %}" class="btn btn-secondary">
-                                <i class="fa-solid fa-arrow-left"></i> Volver
-                            </a>
-                            <a href="{% url 'community:community_members' community.pk %}" class="btn btn-info">
+                            <a href="{% url 'community:community_members' %}" class="btn btn-info">
                                 <i class="fa-solid fa-users"></i> Ver Miembros
                             </a>
                             <button type="button" class="btn btn-warning">
@@ -130,27 +125,53 @@
 {% endblock content %}
 
 {% block extra_js %}
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    {% if GOOGLE_MAPS_API_KEY %}
+        <script
+                src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&callback=initMap"
+                async defer>
+        </script>
+    {% else %}
+        <script>
+            console.warn('GOOGLE_MAPS_API_KEY no está definido en el contexto. El mapa no se cargará.');
+        </script>
+    {% endif %}
+    {% if community.boundary_area %}
+        <script>
+            const boundaryData = {{ community.boundary_area.geojson|safe }};
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const boundary = {{ community.boundary_area|safe }};
-            if (!boundary || !boundary.coordinates) return;
+            async function initMap() {
+                const {Map} = await google.maps.importLibrary("maps");
 
-            const map = L.map("map");
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                maxZoom: 19,
-                attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
-            }).addTo(map);
+                const coordinates = boundaryData.coordinates[0];
+                const bounds = new google.maps.LatLngBounds();
 
-            const polygon = L.polygon(boundary.coordinates[0].map(coord => [coord[1], coord[0]]), {
-                color: "blue",
-                fillColor: "#3f8efc",
-                fillOpacity: 0.4
-            }).addTo(map);
+                coordinates.forEach(coord => {
+                    bounds.extend(new google.maps.LatLng(coord[1], coord[0]));
+                });
 
-            map.fitBounds(polygon.getBounds());
-        });
-    </script>
+                const map = new Map(document.getElementById("map"), {
+                    center: bounds.getCenter(),
+                    zoom: 14,
+                    mapId: "DEMO_MAP_ID"
+                });
+
+                const polygon = new google.maps.Polygon({
+                    paths: coordinates.map(coord => ({
+                        lat: coord[1],
+                        lng: coord[0]
+                    })),
+                    strokeColor: "#0d6efd",
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: "#0d6efd",
+                    fillOpacity: 0.35
+                });
+
+                polygon.setMap(map);
+                map.fitBounds(bounds);
+            }
+
+            window.initMap = initMap;
+        </script>
+    {% endif %}
 {% endblock extra_js %}

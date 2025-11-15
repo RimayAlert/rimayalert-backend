@@ -1,0 +1,23 @@
+FROM python:3.12-slim AS build
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV APP_HOME=/app
+
+WORKDIR $APP_HOME
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3-gdal \
+    libproj-dev \
+    binutils \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV GDAL_CONFIG=/usr/bin/gdal-config
+
+COPY requirements/ ./requirements/
+RUN pip install --upgrade pip setuptools \
+    && pip install --no-cache-dir -r requirements/production.txt
+
+COPY . .
+
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
