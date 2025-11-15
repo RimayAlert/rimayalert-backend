@@ -1,9 +1,13 @@
+import logging
+
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.community.api.community.feature.community import ValidateOrCreateCommunityFeature
+
+logger = logging.getLogger(__name__)
 
 
 class AssignCommunityUser(APIView):
@@ -25,13 +29,22 @@ class AssignCommunityUser(APIView):
                 latitude=latitude,
                 longitude=longitude
             )
+            logger.info(
+                f"User {request.user.id} is attempting to assign community with "
+                f"latitude: {latitude}, longitude: {longitude}"
+            )
         except ValueError:
+            logger.error(
+                f"Invalid latitude or longitude provided by user {request.user.id}: "
+                f"latitude={latitude}, longitude={longitude}"
+            )
             return Response(
                 {"message": "latitude y longitude deben ser numéricos"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         result = feature.execute()
+        logger.info(f"Community assignment result for user {request.user.id}: {result}")
         return Response(
             {
                 "has_community": result["has_community"],
