@@ -117,7 +117,7 @@ class PermissionMixinTest(TestCase):
         response = view(request)
 
         self.assertEqual(response.status_code, 302)
-        mock_redirect.assert_called_with('login')
+        mock_redirect.assert_called_with('authentication:login')
 
     def test_dispatch_allows_access_when_user_has_permission(self):
         """Test dispatch allows access when user has required permission"""
@@ -151,7 +151,7 @@ class PermissionMixinTest(TestCase):
         response = view(request)
 
         self.assertEqual(response.status_code, 302)
-        mock_redirect.assert_called_with('login')
+        mock_redirect.assert_called_with('authentication:login')
 
     def test_dispatch_allows_access_when_no_permission_required(self):
         """Test dispatch allows access when no permission is required"""
