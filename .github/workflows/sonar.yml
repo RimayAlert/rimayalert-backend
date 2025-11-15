@@ -50,7 +50,7 @@ jobs:
           sudo apt-get update
           sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable || true
           sudo apt-get update
-          sudo apt-get install -y gdal-bin libgdal-dev python3-gdal binutils libproj-dev
+          sudo apt-get install -y gdal-bin python3-gdal binutils libproj-dev
           gdalinfo --version || true
 
       - name: Install dependencies
