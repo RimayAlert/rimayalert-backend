@@ -21,10 +21,10 @@ class PermissionMixin(object):
             if group and group.permissions.filter(codename__in=permissions_to_validate).exists():
                 return super().dispatch(request, *args, **kwargs)
 
-            return redirect('login')
+            return redirect('authentication:login')
         except Exception as e:
             print(f'PermissionMixin dispatch error: {e}')
-            return redirect('login')
+            return redirect('authentication:login')
 
     def _get_permissions_to_validate(self):
         if self.permission_required == '':

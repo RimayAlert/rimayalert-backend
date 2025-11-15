@@ -1,10 +1,11 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 
+from config.mixins.permissions.permissions import PermissionMixin
 from core.incident.models import Incident
 
 
-class DashboardView(LoginRequiredMixin, TemplateView):
+class DashboardView(PermissionMixin, TemplateView):
+    permission_required = 'can_manage_community'
     template_name = 'dashboard/dashboard.html'
 
     def get_context_data(self, **kwargs):
