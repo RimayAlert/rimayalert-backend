@@ -12,7 +12,7 @@ class PermissionMixin(object):
             user = request.user
             user.set_group_session(request)
             if 'group' not in request.session:
-                return redirect('login')
+                return redirect('authentication:login')
             group = user.get_group_session(request)
             permissions_to_validate = self._get_permissions_to_validate()
             if not len(permissions_to_validate):
