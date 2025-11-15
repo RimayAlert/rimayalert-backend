@@ -12,8 +12,10 @@ django-environ==0.12.0
 django-filter==25.2
 django-widget-tweaks==1.5.0
 djangorestframework==3.16.1
+GDAL==3.8.4
 idna==3.10
 Markdown==3.9
+numpy==2.3.4
 psycopg2-binary==2.9.10
 pycparser==2.22
 PyJWT==2.10.1
