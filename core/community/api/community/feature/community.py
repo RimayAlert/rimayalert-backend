@@ -52,6 +52,14 @@ class ValidateOrCreateCommunityFeature:
 
         return membership, created
 
+    def update_data_location_user(self):
+        profile = self.user.profiles_by_user.first()
+        if profile:
+            profile.latitude = self.latitude
+            profile.longitude = self.longitude
+            profile.location = self.point
+            profile.save()
+
     def execute(self):
         validated = self.validate_user_membership()
         if validated:
@@ -62,6 +70,7 @@ class ValidateOrCreateCommunityFeature:
             community = self.create_community()
             created_new = True
         membership, _ = self.assign_user(community)
+        self.update_data_location_user()
         return {
             "has_community": True,
             "community": {
