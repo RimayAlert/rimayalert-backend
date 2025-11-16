@@ -1,28 +1,13 @@
-from django.contrib.gis.geos import Point
+import logging
+
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from core.community.models import CommunityMembership, Community
+from core.community.api.community.feature.community import ValidateOrCreateCommunityFeature
 
-
-class CheckCommunityUser(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        user = request.user
-        membership = user.c_memberships_by_user.select_related('community').first()
-
-        data_response = {
-            "hasCommunity": membership is not None,
-            "community": {
-                "id": membership.community.id,
-                "name": membership.community.name,
-                "isVerified": membership.is_verified
-            } if membership else None,
-        }
-        return Response(data=data_response, status=status.HTTP_200_OK)
+logger = logging.getLogger(__name__)
 
 
 class AssignCommunityUser(APIView):
@@ -30,47 +15,34 @@ class AssignCommunityUser(APIView):
 
     def post(self, request):
         data = request.data
-        latitude = data.get('latitude')
-        longitude = data.get('longitude')
-
-        # Aceptar 0.0 como válido; sólo rechazar si es None
+        latitude = data.get("latitude")
+        longitude = data.get("longitude")
         if latitude is None or longitude is None:
-            return Response(
-                {"error": "latitude y longitude son requeridos"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"message": "latitude y longitude son requeridos"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            point = Point(float(longitude), float(latitude), srid=4326)
-        except (TypeError, ValueError):
+            feature = ValidateOrCreateCommunityFeature(request.user, latitude, longitude)
+            logger.info(
+                f"User {request.user.id} is attempting to assign community with "
+                f"latitude: {latitude}, longitude: {longitude}"
+            )
+        except ValueError:
+            logger.error(
+                f"Invalid latitude or longitude provided by user {request.user.id}: "
+                f"latitude={latitude}, longitude={longitude}"
+            )
             return Response(
-                {"error": "latitude y longitude deben ser numéricos"},
+                {"message": "latitude y longitude deben ser numéricos"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        community = Community.objects.filter(
-            boundary_area__contains=point,
-            is_active=True
-        ).first()
-
-        if not community:
-            return Response(
-                {"error": "No se encontró comunidad para la ubicación proporcionada"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        membership, created = CommunityMembership.objects.get_or_create(
-            user=request.user,
-            community=community,
-            defaults={'is_verified': False}
-        )
-
+        result = feature.execute()
+        logger.info(f"Community assignment result for user {request.user.id}: {result}")
         return Response(
             {
-                "communityId": community.id,
-                "communityName": community.name,
-                "isVerified": membership.is_verified,
-                "created": created
+                "has_community": result["has_community"],
+                "community": result["community"],
+                "message": result["message"]
             },
-            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK
+            status=result["status"]
         )
