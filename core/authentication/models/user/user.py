@@ -76,6 +76,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         item['alias_name'] = self.get_alias_name_by_user_profile()
         return item
 
+    def get_group_session(self, request):
+        return request.session.get('group', None)
+
+    def set_group_session(self, request):
+        if 'group' not in request.session:
+            groups = self.groups.all().order_by('id')
+            if groups.exists():
+                request.session['group'] = groups.first()
+
     class Meta:
         verbose_name = 'Usuario'
         verbose_name_plural = 'Usuarios'
