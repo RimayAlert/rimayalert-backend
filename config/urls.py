@@ -27,6 +27,7 @@ urlpatterns = [
     path('dashboard/', include('core.dashboard.urls')),
     path('incidents/', include('core.incident.urls')),
     path('communities/', include('core.community.urls')),
+    path('stats/', include('core.stats.urls')),
 ]
 
 if settings.DEBUG:
