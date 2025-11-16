@@ -14,6 +14,7 @@ from pathlib import Path
 
 import environ
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -33,6 +34,24 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = int(env('DEBUG', default=0)) == 1
 
 ALLOWED_HOSTS = ["*"]
+
+
+# ============================================
+# CONFIGURACIÓN DE FUNCIONALIDADES OPCIONALES
+# ============================================
+from config2.config_product import get_active_product
+
+# Cargar configuración del producto activo
+ACTIVE_PRODUCT_CONFIG = get_active_product()
+PRODUCT_NAME = ACTIVE_PRODUCT_CONFIG['name']
+PRODUCT_DESCRIPTION = ACTIVE_PRODUCT_CONFIG['description']
+
+# Aplicar features del producto activo
+ENABLE_STATS = ACTIVE_PRODUCT_CONFIG['features']['ENABLE_STATS']
+ENABLE_API = ACTIVE_PRODUCT_CONFIG['features']['ENABLE_API']
+ENABLE_COMMUNITY_MEMBERSHIP = ACTIVE_PRODUCT_CONFIG['features']['ENABLE_COMMUNITY_MEMBERSHIP']
+ENABLE_INCIDENT_COMMENTS = ACTIVE_PRODUCT_CONFIG['features']['ENABLE_INCIDENT_COMMENTS']
+ENABLE_INCIDENT_MEDIA = ACTIVE_PRODUCT_CONFIG['features']['ENABLE_INCIDENT_MEDIA']
 
 # Google Maps API Key
 GOOGLE_MAPS_API_KEY = env("GOOGLE_MAPS_API_KEY", default='')
