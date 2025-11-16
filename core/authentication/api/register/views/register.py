@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from core.authentication.api.register.feature.FCM_token import RegisterFCMTokenFeature
 from core.authentication.api.register.feature.register import RegisterUserProfileFeature
 from core.authentication.api.register.serializers.register import RegisterUserSerializerInput
 
@@ -32,6 +33,12 @@ class RegisterUserApiView(APIView):
             "displayName": request_data.get("displayName")
         }
 
+    def map_data_token_fcm(self, request_data):
+        return {
+            "token": request_data.get("fcmToken"),
+            "deviceId": request_data.get("deviceId")
+        }
+
     def post(self, request, *args, **kwargs):
         try:
             with transaction.atomic():
@@ -42,6 +49,12 @@ class RegisterUserApiView(APIView):
                 profile_data = self.map_data_profile(request.data)
                 feature = RegisterUserProfileFeature()
                 feature.create_user_profile(user, profile_data)
+
+                fcm_data = self.map_data_token_fcm(request.data)
+                if fcm_data.get("token"):
+                    fcm_feature = RegisterFCMTokenFeature()
+                    fcm_feature.register_or_update_token(user, fcm_data)
+
                 return Response({"message": "User registered successfully"},
                                 status=status.HTTP_201_CREATED)
         except ValidationError as ve:
