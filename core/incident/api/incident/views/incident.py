@@ -65,14 +65,8 @@ class RegisterIncidentApiView(APIView):
 
     def _notify_nearby_users(self, incident, latitude, longitude):
         try:
-            location_utils = LocationUtils(
-                latitude=float(latitude),
-                longitude=float(longitude),
-                radius_km=2.0
-            )
-
+            location_utils = LocationUtils(float(latitude),float(longitude),2.0)
             nearby_users = location_utils.get_nearby_users()
-
             if not nearby_users:
                 logger.info("No hay usuarios cercanos para notificar")
                 return

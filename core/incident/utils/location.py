@@ -20,7 +20,6 @@ class LocationUtils:
 
     def get_nearby_users(self):
         try:
-            # Buscar perfiles de usuarios dentro del radio
             nearby_profiles = UserProfile.objects.filter(
                 location__distance_lte=(
                     self.origin_point,
@@ -29,17 +28,12 @@ class LocationUtils:
             ).annotate(
                 distance=DistanceFunc('location', self.origin_point)
             ).select_related('user').order_by('distance')
-
-            # Extraer los usuarios
             users = [profile.user for profile in nearby_profiles]
-
             logger.info(
                 f"Encontrados {len(users)} usuarios dentro de {self.radius_km}km "
                 f"de ({self.latitude}, {self.longitude})"
             )
-
             return users
-
         except Exception as e:
             logger.error(f"Error al buscar usuarios cercanos: {str(e)}")
             return []

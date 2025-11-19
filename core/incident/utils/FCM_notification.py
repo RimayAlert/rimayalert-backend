@@ -11,23 +11,10 @@ class FCMNotificationUtils:
 
     @staticmethod
     def send_notification_to_users(users, title, body, data=None):
-        """
-        Envía notificación push a una lista de usuarios
-
-        Args:
-            users: Lista de instancias de User
-            title: Título de la notificación
-            body: Cuerpo del mensaje
-            data: Dict opcional con datos adicionales
-
-        Returns:
-            Dict con resultados del envío
-        """
         if not users:
             logger.warning("No hay usuarios para enviar notificaciones")
             return {'success': 0, 'failed': 0}
 
-        # Obtener tokens activos de los usuarios
         user_ids = [user.id for user in users]
         tokens = FCMToken.objects.filter(
             user_id__in=user_ids,
@@ -47,18 +34,6 @@ class FCMNotificationUtils:
 
     @staticmethod
     def send_notification_to_tokens(tokens, title, body, data=None):
-        """
-        Envía notificación a una lista de tokens
-
-        Args:
-            tokens: Lista de tokens FCM
-            title: Título de la notificación
-            body: Cuerpo del mensaje
-            data: Dict opcional con datos adicionales
-
-        Returns:
-            Dict con resultados: {'success': int, 'failed': int, 'invalid_tokens': list}
-        """
         if not tokens:
             return {'success': 0, 'failed': 0, 'invalid_tokens': []}
 
@@ -66,16 +41,13 @@ class FCMNotificationUtils:
         failed_count = 0
         invalid_tokens = []
 
-        # Preparar datos adicionales
         notification_data = data or {}
 
-        # Crear mensaje de notificación
         notification = messaging.Notification(
             title=title,
             body=body
         )
 
-        # Enviar a cada token (Firebase permite envío en lote, pero para mejor control lo hacemos individual)
         for token in tokens:
             try:
                 message = messaging.Message(
@@ -104,7 +76,6 @@ class FCMNotificationUtils:
                 logger.info(f"Notificación enviada exitosamente: {response}")
 
             except messaging.UnregisteredError:
-                # Token inválido o desregistrado
                 logger.warning(f"Token no registrado o inválido: {token[:20]}...")
                 invalid_tokens.append(token)
                 failed_count += 1
@@ -113,7 +84,6 @@ class FCMNotificationUtils:
                 logger.error(f"Error al enviar notificación al token {token[:20]}...: {str(e)}")
                 failed_count += 1
 
-        # Desactivar tokens inválidos
         if invalid_tokens:
             FCMToken.objects.filter(token__in=invalid_tokens).update(is_active=False)
             logger.info(f"Desactivados {len(invalid_tokens)} tokens inválidos")
