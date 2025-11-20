@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 
 from core.incident.models import Incident, IncidentStatus
+from core.stats.models import UserStats
+from django.db.models import F
 from core.incident.forms import SearchIncidentForm
 
 
@@ -65,6 +67,10 @@ class ResolveIncidentView(View):
             resolved_status = IncidentStatus.objects.get(name='Resuelto')
             
         incident.incident_status = resolved_status
+        UserStats.objects.filter(user=incident.reported_by_user).update(
+            total_alerts_pending=F('total_alerts_pending') - 1,
+            total_alerts_resolved=F('total_alerts_resolved') + 1,
+        )
         incident.save()
         
         messages.success(request, 'Incidente marcado como resuelto exitosamente.')
