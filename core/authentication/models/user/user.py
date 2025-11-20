@@ -3,7 +3,7 @@ from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.db import models
 from django.forms import model_to_dict
 from django.utils import timezone
-
+from django.contrib.auth.models import Group
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
@@ -77,13 +77,19 @@ class User(AbstractBaseUser, PermissionsMixin):
         return item
 
     def get_group_session(self, request):
-        return request.session.get('group', None)
+        group_id = request.session.get('group_id', None)
+        if group_id:
+            try:
+                return Group.objects.get(id=group_id)
+            except Group.DoesNotExist:
+                return None
+        return None
 
     def set_group_session(self, request):
-        if 'group' not in request.session:
+        if 'group_id' not in request.session:
             groups = self.groups.all().order_by('id')
             if groups.exists():
-                request.session['group'] = groups.first()
+                request.session['group_id'] = groups.first().id
 
     class Meta:
         verbose_name = 'Usuario'
