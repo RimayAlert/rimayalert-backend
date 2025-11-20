@@ -238,3 +238,96 @@ class CreateIncidentFeatureTest(TestCase):
         # Verificar que la fecha es reciente (dentro de los últimos 5 segundos)
         time_diff = timezone.now() - incident.occurred_at
         self.assertLess(time_diff.total_seconds(), 5)
+
+    def test_save_incident_creates_user_stats_if_not_exists(self):
+        """Prueba que se crea UserStats si no existe para el usuario"""
+        from core.stats.models import UserStats
+        
+        # Verificar que no existe UserStats para el usuario
+        self.assertFalse(UserStats.objects.filter(user=self.user).exists())
+        
+        feature = CreateIncidentFeature(
+            data=self.incident_data,
+            user=self.user
+        )
+        
+        incident = feature.save_incident()
+        
+        # Verificar que se creó UserStats
+        self.assertTrue(UserStats.objects.filter(user=self.user).exists())
+        stats = UserStats.objects.get(user=self.user)
+        self.assertEqual(stats.total_alerts, 1)
+        self.assertEqual(stats.total_alerts_pending, 1)
+
+    def test_save_incident_updates_existing_user_stats(self):
+        """Prueba que actualiza UserStats existente correctamente"""
+        from core.stats.models import UserStats
+        
+        # Crear UserStats previo
+        stats = UserStats.objects.create(
+            user=self.user,
+            total_alerts=5,
+            total_alerts_resolved=2,
+            total_alerts_pending=3
+        )
+        
+        feature = CreateIncidentFeature(
+            data=self.incident_data,
+            user=self.user
+        )
+        
+        incident = feature.save_incident()
+        
+        # Verificar que se actualizó correctamente
+        stats.refresh_from_db()
+        self.assertEqual(stats.total_alerts, 6)
+        self.assertEqual(stats.total_alerts_pending, 4)
+        self.assertEqual(stats.total_alerts_resolved, 2)  # No debe cambiar
+
+    def test_save_incident_increments_total_alerts(self):
+        """Prueba que total_alerts se incrementa correctamente"""
+        from core.stats.models import UserStats
+        
+        feature = CreateIncidentFeature(
+            data=self.incident_data,
+            user=self.user
+        )
+        
+        incident = feature.save_incident()
+        
+        stats = UserStats.objects.get(user=self.user)
+        self.assertEqual(stats.total_alerts, 1)
+        
+        # Crear otro incidente
+        feature2 = CreateIncidentFeature(
+            data=self.incident_data,
+            user=self.user
+        )
+        incident2 = feature2.save_incident()
+        
+        stats.refresh_from_db()
+        self.assertEqual(stats.total_alerts, 2)
+
+    def test_save_incident_increments_total_alerts_pending(self):
+        """Prueba que total_alerts_pending se incrementa correctamente"""
+        from core.stats.models import UserStats
+        
+        feature = CreateIncidentFeature(
+            data=self.incident_data,
+            user=self.user
+        )
+        
+        incident = feature.save_incident()
+        
+        stats = UserStats.objects.get(user=self.user)
+        self.assertEqual(stats.total_alerts_pending, 1)
+        
+        # Crear otro incidente
+        feature2 = CreateIncidentFeature(
+            data=self.incident_data,
+            user=self.user
+        )
+        incident2 = feature2.save_incident()
+        
+        stats.refresh_from_db()
+        self.assertEqual(stats.total_alerts_pending, 2)

@@ -4,7 +4,6 @@ from django.contrib.gis.geos import Point
 
 from core.incident.models import IncidentMedia, Incident, IncidentType, IncidentStatus
 from core.stats.models import UserStats
-from django.db.models import F
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +54,7 @@ class CreateIncidentFeature:
                 occurred_at=timezone.now()
             )
             stats, _ = UserStats.objects.get_or_create(user=incident.reported_by_user)
-            stats.total_incidents += 1
+            stats.total_alerts += 1
             stats.total_alerts_pending += 1
             stats.save()
             logger.info(f"Incidente creado: ID {incident.id}")
