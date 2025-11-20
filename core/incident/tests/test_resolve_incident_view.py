@@ -153,7 +153,8 @@ class ResolveIncidentViewTest(TestCase):
         # Verificar que se creó UserStats
         self.assertTrue(UserStats.objects.filter(user=self.user).exists())
         stats = UserStats.objects.get(user=self.user)
-        self.assertEqual(stats.total_alerts_pending, -1)  # 0 - 1
+        # Como no había stats previos, pending debería ser 0 (no puede ser negativo)
+        self.assertEqual(stats.total_alerts_pending, 0)  # max(0, 0 - 1) = 0
         self.assertEqual(stats.total_alerts_resolved, 1)  # 0 + 1
 
     def test_resolve_incident_only_accepts_post(self):
@@ -181,6 +182,6 @@ class ResolveIncidentViewTest(TestCase):
         self.assertEqual(response2.status_code, 302)
         
         self.stats.refresh_from_db()
-        # Las estadísticas deberían cambiar nuevamente
-        self.assertEqual(self.stats.total_alerts_pending, pending_after_first - 1)
+        # Las estadísticas deberían cambiar nuevamente (pero pending no puede ser negativo)
+        self.assertEqual(self.stats.total_alerts_pending, max(0, pending_after_first - 1))
         self.assertEqual(self.stats.total_alerts_resolved, resolved_after_first + 1)
