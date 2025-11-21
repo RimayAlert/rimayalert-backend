@@ -42,7 +42,7 @@ class UserSessionMethodsTest(TestCase):
         """Test get_group_session returns group when it exists in session"""
         request = self.factory.get('/')
         request = self._add_session_to_request(request)
-        request.session['group'] = self.group1
+        request.session['group_id'] = self.group1.id
 
         result = self.user.get_group_session(request)
 
@@ -72,9 +72,9 @@ class UserSessionMethodsTest(TestCase):
         self.user.set_group_session(request)
 
         # Verify group was added to session
-        self.assertIn('group', request.session)
+        self.assertIn('group_id', request.session)
         # Should be the first group (ordered by id)
-        self.assertEqual(request.session['group'], self.group1)
+        self.assertEqual(request.session['group_id'], self.group1.id)
 
     def test_set_group_session_does_not_create_when_user_has_no_groups(self):
         """Test set_group_session doesn't create session when user has no groups"""
@@ -93,13 +93,13 @@ class UserSessionMethodsTest(TestCase):
 
         request = self.factory.get('/')
         request = self._add_session_to_request(request)
-        request.session['group'] = self.group2
+        request.session['group_id'] = self.group2.id
 
         # Call set_group_session
         self.user.set_group_session(request)
 
         # Verify group was NOT changed
-        self.assertEqual(request.session['group'], self.group2)
+        self.assertEqual(request.session['group_id'], self.group2.id)
 
     def test_set_group_session_selects_first_group_by_id(self):
         """Test set_group_session selects first group ordered by id"""
@@ -113,5 +113,5 @@ class UserSessionMethodsTest(TestCase):
 
         # Should select group with lowest id
         expected_group = self.user.groups.all().order_by('id').first()
-        self.assertEqual(request.session['group'], expected_group)
+        self.assertEqual(request.session['group_id'], expected_group.id)
 

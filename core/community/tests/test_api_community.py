@@ -46,24 +46,26 @@ class CommunityAPITests(APITestCase):
         except NoReverseMatch:
             return fallback
 
-    # --- Tests de /communities/api/community/check (No requeridos, pero mantenidos) ---
+    # --- Tests de /communities/api/community/check (Endpoint removed in PR #32) ---
+    # The check_community endpoint was removed and consolidated into assign_community
+    # These tests are commented out as the endpoint no longer exists
+    
+    # def test_check_community_user_without_membership(self):
+    #     url = self._url('check_community', '/communities/api/community/check')
+    #     response = self.client.get(url)
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+    #     self.assertFalse(response.data['hasCommunity'])
+    #     self.assertIsNone(response.data['community'])
 
-    def test_check_community_user_without_membership(self):
-        url = self._url('check_community', '/communities/api/community/check')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertFalse(response.data['hasCommunity'])
-        self.assertIsNone(response.data['community'])
-
-    def test_check_community_user_with_membership(self):
-        # Asegúrate de que el modelo CommunityMembership esté disponible
-        CommunityMembership.objects.create(user=self.user, community=self.community)
-        url = self._url('check_community', '/communities/api/community/check')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(response.data['hasCommunity'])
-        self.assertIsNotNone(response.data['community'])
-        self.assertEqual(response.data['community']['id'], self.community.id)
+    # def test_check_community_user_with_membership(self):
+    #     # Asegúrate de que el modelo CommunityMembership esté disponible
+    #     CommunityMembership.objects.create(user=self.user, community=self.community)
+    #     url = self._url('check_community', '/communities/api/community/check')
+    #     response = self.client.get(url)
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+    #     self.assertTrue(response.data['hasCommunity'])
+    #     self.assertIsNotNone(response.data['community'])
+    #     self.assertEqual(response.data['community']['id'], self.community.id)
 
     # -----------------------------------------------------------------------------------
 
@@ -194,12 +196,7 @@ class CommunityAPITests(APITestCase):
         """Prueba que los usuarios no autenticados no pueden asignar comunidad."""
         self.client.logout()
         assign_url = self._url('assign_community', '/communities/api/community/assign')
-        check_url = self._url('check_community', '/communities/api/community/check')  # Añadido por completitud
 
         # Probar POST (assign)
         r_post = self.client.post(assign_url, data={"latitude": 0.0, "longitude": 0.0})
         self.assertEqual(r_post.status_code, status.HTTP_401_UNAUTHORIZED)
-
-        # Probar GET (check)
-        r_get = self.client.get(check_url)
-        self.assertEqual(r_get.status_code, status.HTTP_401_UNAUTHORIZED)
