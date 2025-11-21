@@ -67,16 +67,40 @@ class RegisterIncidentApiView(APIView):
         try:
             location_utils = LocationUtils(float(latitude), float(longitude), 2.0)
             nearby_users = location_utils.get_nearby_users()
+
             if not nearby_users:
                 logger.info("No hay usuarios cercanos para notificar")
                 return
 
-            title = "🚨 Alerta de Incidente Cercano"
-            body = f"Se reportó un incidente a menos de 2km de tu ubicación"
+            incident_type = getattr(incident, "incident_type", "incidente")
+            incident_type_lower = str(incident_type).lower()
+
+            title_map = {
+                "robo": "🚨 Alerta de Robo Cercano",
+                "asalto": "🚨 Alerta de Asalto Cercano",
+                "accidente": "🚑 Accidente de Tránsito Cercano",
+                "emergencia": "🆘 Emergencia Médica Cercana",
+                "medico": "🆘 Emergencia Médica Cercana",
+                "incendio": "🔥 Alerta de Incendio Cercano",
+                "seguridad": "🛡️ Alerta de Seguridad en tu Zona",
+            }
+
+            body_map = {
+                "robo": "Se ha reportado un posible robo cerca de tu ubicación. Mantente alerta.",
+                "asalto": "Se ha reportado un asalto en tu zona. Evita transitar por el área.",
+                "accidente": "Se registró un accidente de tránsito a menos de 2 km de tu ubicación.",
+                "emergencia": "Se ha reportado una emergencia médica cercana.",
+                "medico": "Atención: emergencia médica registrada en tu sector.",
+                "incendio": "Se reporta un posible incendio cerca de tu ubicación. Toma precauciones.",
+                "seguridad": "Se ha reportado una situación de seguridad en tu zona. Permanece atento y toma precauciones.",
+            }
+
+            title = title_map.get(incident_type_lower, "⚠️ Incidente Cercano")
+            body = body_map.get(incident_type_lower, "Se detectó un incidente cerca de tu ubicación.")
 
             notification_data = {
                 'incident_id': str(incident.id),
-                'incident_type': str(incident.incident_type) if hasattr(incident, 'incident_type') else 'incident',
+                'incident_type': str(incident.incident_type),
                 'latitude': str(latitude),
                 'longitude': str(longitude),
                 'click_action': 'OPEN_INCIDENT_DETAIL'
@@ -96,3 +120,4 @@ class RegisterIncidentApiView(APIView):
 
         except Exception as e:
             logger.error(f"Error al notificar usuarios cercanos: {str(e)}", exc_info=True)
+

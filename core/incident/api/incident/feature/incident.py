@@ -66,9 +66,6 @@ class CreateIncidentFeature:
                     file=self.image_file
                 )
                 logger.info(f"Imagen guardada: {media.file.name}")
-
-            self
-
             return incident
 
         except Exception as e:
