@@ -1,36 +1,43 @@
 {% extends 'components/table/table.html' %}
 
 {% block columns %}
-    <th scope="col">ID</th>
-    <th scope="col">Título</th>
-    <th scope="col">Estado</th>
-    <th scope="col">Prioridad</th>
-    <th scope="col">Fecha de reporte</th>
-    <th scope="col" class="text-center">Acciones</th>
+<th scope="col">ID</th>
+<th scope="col">Título</th>
+<th scope="col">Estado</th>
+<th scope="col">Prioridad</th>
+<th scope="col">Fecha de reporte</th>
+<th scope="col" class="text-center">Acciones</th>
 {% endblock columns %}
 
 {% block rows %}
-    <td>{{ item.id }}</td>
-    <td>{{ item.title }}</td>
-    <td>{{ item.incident_status }}</td>
-    <td>
-        {% if item.severity_level %}
-            <span class="badge
+<td>{{ item.id }}</td>
+<td>{{ item.title }}</td>
+<td>{{ item.incident_status }}</td>
+<td>
+    {% if item.severity_level %}
+    <span class="badge
                 {% if item.severity_level <= 3 %}bg-success
                 {% elif item.severity_level <= 6 %}bg-warning
                 {% else %}bg-danger{% endif %}">
-                {{ item.severity_level }}
-            </span>
-        {% else %}
-            <span class="text-muted">-</span>
-        {% endif %}
-    </td>
-    <td>{{ item.reported_at|date:"d/m/Y H:i" }}</td>
-    <td class="text-center">
-        <a href="{% url 'incident:incident_detail' item.pk %}"
-           class="btn btn-sm btn-outline-primary"
-           title="Ver detalle">
-            <i class="fa-solid fa-eye"></i>
-        </a>
-    </td>
+        {{ item.severity_level }}
+    </span>
+    {% else %}
+    <span class="text-muted">-</span>
+    {% endif %}
+</td>
+<td>{{ item.reported_at|date:"d/m/Y H:i" }}</td>
+<td class="text-center">
+    <a href="{% url 'incident:incident_detail' item.pk %}" class="btn btn-sm btn-outline-primary" title="Ver detalle">
+        <i class="fa-solid fa-eye"></i>
+    </a>
+    {% if item.incident_status.code != 'RESOL_01' %}
+    <form action="{% url 'incident:resolve_incident' item.pk %}" method="post" class="d-inline"
+        onsubmit="return confirm('¿Estás seguro de marcar este incidente como resuelto?');">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-sm btn-outline-success" title="Marcar como resuelto">
+            <i class="fa-solid fa-check"></i>
+        </button>
+    </form>
+    {% endif %}
+</td>
 {% endblock %}

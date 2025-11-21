@@ -2,7 +2,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 
-
 class PermissionMixin(object):
     permission_required = ''
 
@@ -11,19 +10,28 @@ class PermissionMixin(object):
         try:
             user = request.user
             user.set_group_session(request)
-            if 'group' not in request.session:
+            
+            if 'group_id' not in request.session:
                 return redirect('authentication:login')
+        
             group = user.get_group_session(request)
+        
+            if not group:
+                return redirect('authentication:login')
+        
             permissions_to_validate = self._get_permissions_to_validate()
+        
             if not len(permissions_to_validate):
                 return super().dispatch(request, *args, **kwargs)
 
-            if group and group.permissions.filter(codename__in=permissions_to_validate).exists():
+            has_permission = group.permissions.filter(codename__in=permissions_to_validate).exists()
+        
+            if has_permission:
                 return super().dispatch(request, *args, **kwargs)
 
             return redirect('authentication:login')
+        
         except Exception as e:
-            print(f'PermissionMixin dispatch error: {e}')
             return redirect('authentication:login')
 
     def _get_permissions_to_validate(self):
