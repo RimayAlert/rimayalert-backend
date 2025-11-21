@@ -29,3 +29,6 @@ docker exec -u 0 -it IDCONTAINER /bin/bash
 apt-get update
 apt-get install vim
 apt-get install nano
+
+# docker compuse gis
+docker compose -f docker-compose.gis.yml -p rimay_gis up -d
