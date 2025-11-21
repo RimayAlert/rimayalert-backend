@@ -53,12 +53,12 @@ class ValidateOrCreateCommunityFeature:
         return membership, created
 
     def update_data_location_user(self):
-        profile = self.user.profiles_by_user.first()
-        if profile:
-            profile.latitude = self.latitude
-            profile.longitude = self.longitude
-            profile.location = self.point
-            profile.save()
+        from core.authentication.models import UserProfile
+        profile, created = UserProfile.objects.get_or_create(user=self.user)
+        profile.latitude = self.latitude
+        profile.longitude = self.longitude
+        profile.location = self.point
+        profile.save()
 
     def execute(self):
         validated = self.validate_user_membership()

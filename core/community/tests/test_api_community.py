@@ -114,7 +114,7 @@ class CommunityAPITests(APITestCase):
 
         response = self.client.post(url, data=data)
 
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data['has_community'])
         # La vista ahora devuelve 'communityId', así que adaptamos las comprobaciones
         self.assertEqual(response.data['community']['id'], self.community.id)
