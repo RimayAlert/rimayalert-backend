@@ -53,7 +53,7 @@ class ValidateOrCreateCommunityFeature:
         return membership, created
 
     def update_data_location_user(self):
-        profile = self.user.profiles_by_user.first()
+        profile = self.user.profiles_by_user
         if profile:
             profile.latitude = self.latitude
             profile.longitude = self.longitude

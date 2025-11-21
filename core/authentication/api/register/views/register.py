@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 class RegisterUserApiView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     def map_data_user(self, request_data):
@@ -30,7 +31,9 @@ class RegisterUserApiView(APIView):
 
     def map_data_profile(self, request_data):
         return {
-            "displayName": request_data.get("displayName")
+            "displayName": request_data.get("displayName"),
+            "latitude": request_data.get("latitude"),
+            "longitude": request_data.get("longitude"),
         }
 
     def map_data_token_fcm(self, request_data):

@@ -20,8 +20,8 @@ class AssignCommunityUser(APIView):
         if latitude is None or longitude is None:
             return Response({"message": "latitude y longitude son requeridos"}, status=status.HTTP_400_BAD_REQUEST)
 
-        feature = ValidateOrCreateCommunityFeature(request.user, latitude, longitude)
         logger.info(f"User {request.user.id} is attempting to assign community with ")
+        feature = ValidateOrCreateCommunityFeature(request.user, latitude, longitude)
         result = feature.execute()
         logger.info(f"Community assignment result for user {request.user.id}: {result}")
         return Response(

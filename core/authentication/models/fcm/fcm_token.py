@@ -8,7 +8,7 @@ class FCMToken(models.Model):
         related_name='fcm_tokens_by_user',
         verbose_name='Usuario'
     )
-    token = models.CharField(max_length=255, unique=True, verbose_name='Token FCM')
+    token = models.TextField(verbose_name="FCM Token",)
     device_id = models.CharField(max_length=255, blank=True, null=True, verbose_name='ID del dispositivo')
     is_active = models.BooleanField(default=True, verbose_name='Activo')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Creado en')
