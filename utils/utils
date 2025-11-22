@@ -1,0 +1,4 @@
+
+>>> base 64 de fcm token
+
+ base64 -w 0 secrets/rimayalertback-firebase-admin-sdk-key.json > firebase_admin_b64.txt

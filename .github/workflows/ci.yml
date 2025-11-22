@@ -40,6 +40,12 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Recreate firebase admin credentials
+        run: |
+          set -e
+          mkdir -p secrets
+          echo "${{ secrets.FIREBASE_ADMIN_CREDENTIALS }}" | base64 --decode > secrets/rimayalertback-firebase-admin-sdk-key.json
+
       - name: Install system dependencies for GDAL and PostGIS
         run: |
           sudo apt-get update
