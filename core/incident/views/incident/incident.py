@@ -67,7 +67,6 @@ class ResolveIncidentView(View):
             
         incident.incident_status = resolved_status
         stats, _ = UserStats.objects.get_or_create(user=incident.reported_by_user)
-        # Evitar valores negativos usando max()
         stats.total_alerts_pending = max(0, stats.total_alerts_pending - 1)
         stats.total_alerts_resolved += 1
         stats.save()

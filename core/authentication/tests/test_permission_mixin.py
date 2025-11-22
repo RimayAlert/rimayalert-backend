@@ -126,7 +126,7 @@ class PermissionMixinTest(TestCase):
 
         request = self.factory.get('/')
         request = self._add_middleware_to_request(request)
-        request.session['group'] = self.group_with_permission
+        request.session['group_id'] = self.group_with_permission.id
 
         view = DummyViewWithPermission.as_view()
         response = view(request)
@@ -145,7 +145,7 @@ class PermissionMixinTest(TestCase):
 
         request = self.factory.get('/')
         request = self._add_middleware_to_request(request)
-        request.session['group'] = self.group_without_permission
+        request.session['group_id'] = self.group_without_permission.id
 
         view = DummyViewWithPermission.as_view()
         response = view(request)
@@ -160,7 +160,7 @@ class PermissionMixinTest(TestCase):
 
         request = self.factory.get('/')
         request = self._add_middleware_to_request(request)
-        request.session['group'] = self.group_without_permission
+        request.session['group_id'] = self.group_without_permission.id
 
         view = DummyViewWithoutPermission.as_view()
         response = view(request)
@@ -175,7 +175,7 @@ class PermissionMixinTest(TestCase):
 
         request = self.factory.get('/')
         request = self._add_middleware_to_request(request)
-        request.session['group'] = self.group_with_permission
+        request.session['group_id'] = self.group_with_permission.id
 
         view = DummyViewWithMultiplePermissions.as_view()
         response = view(request)
@@ -196,7 +196,7 @@ class PermissionMixinTest(TestCase):
         response = view(request)
 
         # Should have set the group in session
-        self.assertIn('group', request.session)
+        self.assertIn('group_id', request.session)
 
     def test_dispatch_allows_partial_permissions_due_to_exists(self):
         """Test dispatch allows access when user has at least one of multiple required permissions
@@ -212,7 +212,7 @@ class PermissionMixinTest(TestCase):
 
         request = self.factory.get('/')
         request = self._add_middleware_to_request(request)
-        request.session['group'] = group_partial
+        request.session['group_id'] = group_partial.id
 
         view = DummyViewWithMultiplePermissions.as_view()
         response = view(request)
