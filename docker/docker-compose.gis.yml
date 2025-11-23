@@ -1,50 +1,37 @@
 version: '3.8'
 
 services:
-  # --- 1. Base de Datos (con PostGIS) ---
-  # Usamos la imagen oficial de PostGIS, no la de postgres
   gis_db_rimay:
-    image: postgis/postgis:15-3.4 # Imagen estable que incluye PostgreSQL 15 y PostGIS 3.4
-    container_name: gis_db_rimay # Nombre único para tu proyecto
+    image: postgis/postgis:15-3.4
+    container_name: gis_db_rimay
     environment:
-      # --- ↓↓↓ Estas variables deben ir en tu .env de Django ↓↓↓ ---
       POSTGRES_DB: rimay_gis_db
       POSTGRES_USER: rimay_user
       POSTGRES_PASSWORD: rimay_secret_password
-      # --- ↑↑↑ Estas variables deben ir en tu .env de Django ↑↑↑ ---
     ports:
-      # --- ¡Aislamiento Clave! ---
-      # Mapeamos el puerto interno 5432 al 5433 de tu máquina (host).
-      # Así, tu Django se conectará a localhost:5433
       - "5433:5432"
     volumes:
-      - rimay_gis_data:/var/lib/postgresql/data # Volumen único para persistir los datos
+      - rimay_gis_data:/var/lib/postgresql/data
     networks:
       - rimay_gis_network
     restart: unless-stopped
 
-  # --- 2. pgAdmin (Interfaz Gráfica) ---
   pgadmin_rimay:
     image: dpage/pgadmin4:latest
-    container_name: pgadmin_rimay # Nombre único
+    container_name: pgadmin_rimay
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@rimay.com # Email para iniciar sesión en pgAdmin
-      PGADMIN_DEFAULT_PASSWORD: admin_password   # Contraseña para pgAdmin
+      PGADMIN_DEFAULT_EMAIL: admin@rimay.com
+      PGADMIN_DEFAULT_PASSWORD: admin_password
     ports:
-      # --- ¡Aislamiento Clave! ---
-      # Mapeamos el puerto interno 80 al 5051 de tu máquina (host).
-      # Accederás desde http://localhost:5051
       - "5051:80"
     volumes:
-      - rimay_pgadmin_data:/var/lib/pgadmin # Volumen único para guardar tus servidores
+      - rimay_pgadmin_data:/var/lib/pgadmin
     networks:
       - rimay_gis_network
     depends_on:
-      - gis_db_rimay # Asegura que la BD inicie primero
+      - gis_db_rimay
     restart: unless-stopped
 
-# --- Definiciones de Volúmenes y Red ---
-# Nombres únicos para que no se mezclen con tus otros volúmenes
 volumes:
   rimay_gis_data:
   rimay_pgadmin_data:

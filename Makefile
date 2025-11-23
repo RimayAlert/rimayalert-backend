@@ -60,3 +60,13 @@ logs:
 
 psql:
 	docker exec -it codecrafters_postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+
+reset-db:
+	@echo "⚠️  Limpiando base de datos completa (DROP + CREATE)..."
+	bash scripts/reset_db.sh
+	@echo "🔄 Ejecutando migraciones..."
+	make update_database
+	@echo "✨ Base de datos limpia y migraciones aplicadas."
+
+
+

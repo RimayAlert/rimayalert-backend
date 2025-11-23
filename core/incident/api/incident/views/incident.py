@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.incident.api.incident.feature.incident import CreateIncidentFeature
+from core.incident.models import IncidentNotification
 from core.incident.utils.FCM_notification import FCMNotificationUtils
 from core.incident.utils.location import LocationUtils
 
@@ -34,6 +35,7 @@ class RegisterIncidentApiView(APIView):
                 logger.info(f"Imagen recibida: {image_file.name} - {image_file.size} bytes")
             else:
                 logger.info("No se recibió imagen")
+
             incident_feature = CreateIncidentFeature(
                 data=data_dict,
                 user=request.user,
@@ -113,11 +115,26 @@ class RegisterIncidentApiView(APIView):
                 data=notification_data
             )
 
+            notifications_to_create = []
+            for user in nearby_users:
+                notifications_to_create.append(
+                    IncidentNotification(
+                        incident=incident,
+                        notified_user=user
+                    )
+                )
+
+            if notifications_to_create:
+                IncidentNotification.objects.bulk_create(
+                    notifications_to_create,
+                    ignore_conflicts=True
+                )
+
             logger.info(
                 f"Notificaciones enviadas - Exitosas: {result['success']}, "
-                f"Fallidas: {result['failed']}"
+                f"Fallidas: {result['failed']}, "
+                f"Registros guardados: {len(notifications_to_create)}"
             )
 
         except Exception as e:
             logger.error(f"Error al notificar usuarios cercanos: {str(e)}", exc_info=True)
-
