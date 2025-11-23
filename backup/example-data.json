@@ -455,7 +455,7 @@
     "fields": {
       "name": "Comunidad Los Jardines",
       "description": "Comunidad residencial en zona norte. Cuenta con parques y áreas recreativas. Seguridad 24/7.",
-      "boundary_area": "SRID=4326;POLYGON ((-78.4985 -0.1755, -78.498 -0.1755, -78.498 -0.176, -78.4985 -0.176, -78.4985 -0.1755))",
+      "boundary_area": "SRID=4326;POLYGON ((-79.63214681874804 -2.680783212196286, -79.63266036134284 -2.6803944945484304, -79.63333657842531 -2.6812770753732917, -79.63272415492533 -2.6816817248370786, -79.63214681874804 -2.680783212196286))",
       "postal_code": "170516",
       "is_active": true,
       "created_at": "2025-11-06T14:20:15.500Z",
@@ -601,7 +601,7 @@
     "pk": 14,
     "fields": {
       "user": 1,
-      "community": 1,
+      "community": 2,
       "role": "admin",
       "is_verified": true,
       "joined_at": "2025-11-13T21:29:12.241Z"
