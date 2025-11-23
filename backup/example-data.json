@@ -8,11 +8,21 @@
     }
   },
   {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "admin_community",
+      "permissions": [
+        93
+      ]
+    }
+  },
+  {
     "model": "authentication.user",
     "pk": 1,
     "fields": {
       "password": "pbkdf2_sha256$1000000$R5rClH7aGtuwjOhPkf77FB$AOmy+/t+ZFmtJqUcDKjfJImhwoXGpIR3FutwR21xKP8=",
-      "last_login": "2025-11-06T21:57:33.362Z",
+      "last_login": "2025-11-13T20:22:03.749Z",
       "is_superuser": true,
       "first_name": "Anthony Emiliano",
       "last_name": "Terán Arellano",
@@ -31,7 +41,7 @@
     "pk": 2,
     "fields": {
       "password": "",
-      "last_login": null,
+      "last_login": "2025-11-13T21:11:18Z",
       "is_superuser": false,
       "first_name": "Juan",
       "last_name": "Pérez García",
@@ -40,7 +50,7 @@
       "email": "jperez@example.com",
       "is_active": true,
       "is_staff": false,
-      "date_joined": "2025-11-05T22:02:27.136Z",
+      "date_joined": "2025-11-05T22:02:27Z",
       "groups": [],
       "user_permissions": []
     }
@@ -107,7 +117,7 @@
     "pk": 6,
     "fields": {
       "password": "",
-      "last_login": null,
+      "last_login": "2025-11-13T21:08:35Z",
       "is_superuser": false,
       "first_name": "Luis",
       "last_name": "Fernández Ruiz",
@@ -116,7 +126,7 @@
       "email": "lfernandez@example.com",
       "is_active": true,
       "is_staff": false,
-      "date_joined": "2025-11-05T22:02:27.360Z",
+      "date_joined": "2025-11-05T22:02:27Z",
       "groups": [],
       "user_permissions": []
     }
@@ -373,37 +383,11 @@
     "fields": {
       "name": "Comunidad San Martín",
       "description": "Comunidad residencial ubicada en el centro de la ciudad. Vigilancia activa las 24 horas.",
-      "boundary_area": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -78.5024,
-              -0.1807
-            ],
-            [
-              -78.502,
-              -0.1807
-            ],
-            [
-              -78.502,
-              -0.181
-            ],
-            [
-              -78.5024,
-              -0.181
-            ],
-            [
-              -78.5024,
-              -0.1807
-            ]
-          ]
-        ]
-      },
+      "boundary_area": "SRID=4326;POLYGON ((-79.52655080029848 -1.8033329283855153, -79.52680447655473 -1.8039638341553859, -79.52593947993856 -1.8043477506751278, -79.52565644628328 -1.8037406541131435, -79.52655080029848 -1.8033329283855153))",
       "postal_code": "170515",
       "is_active": true,
       "created_at": "2025-11-05T22:05:25.709Z",
-      "updated_at": "2025-11-06T22:02:09.122Z"
+      "updated_at": "2025-11-13T21:07:48.279Z"
     }
   },
   {
@@ -412,33 +396,7 @@
     "fields": {
       "name": "Comunidad Los Jardines",
       "description": "Comunidad residencial en zona norte. Cuenta con parques y áreas recreativas. Seguridad 24/7.",
-      "boundary_area": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -78.4985,
-              -0.1755
-            ],
-            [
-              -78.4980,
-              -0.1755
-            ],
-            [
-              -78.4980,
-              -0.1760
-            ],
-            [
-              -78.4985,
-              -0.1760
-            ],
-            [
-              -78.4985,
-              -0.1755
-            ]
-          ]
-        ]
-      },
+      "boundary_area": "SRID=4326;POLYGON ((-78.4985 -0.1755, -78.498 -0.1755, -78.498 -0.176, -78.4985 -0.176, -78.4985 -0.1755))",
       "postal_code": "170516",
       "is_active": true,
       "created_at": "2025-11-06T14:20:15.500Z",
@@ -451,33 +409,7 @@
     "fields": {
       "name": "Comunidad El Bosque",
       "description": "Comunidad residencial en zona sur con amplias áreas verdes. Cuenta con vigilancia privada y control de acceso.",
-      "boundary_area": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -78.5100,
-              -0.1900
-            ],
-            [
-              -78.5095,
-              -0.1900
-            ],
-            [
-              -78.5095,
-              -0.1905
-            ],
-            [
-              -78.5100,
-              -0.1905
-            ],
-            [
-              -78.5100,
-              -0.1900
-            ]
-          ]
-        ]
-      },
+      "boundary_area": "SRID=4326;POLYGON ((-78.5035 -0.182, -78.503 -0.182, -78.503 -0.1825, -78.5035 -0.1825, -78.5035 -0.182))",
       "postal_code": "170517",
       "is_active": true,
       "created_at": "2025-11-06T16:45:30.800Z",
@@ -490,7 +422,7 @@
     "fields": {
       "user": 2,
       "community": 1,
-      "role": "admin",
+      "role": "member",
       "is_verified": true,
       "joined_at": "2025-11-05T22:03:38.014Z"
     }
@@ -606,6 +538,17 @@
     }
   },
   {
+    "model": "community.communitymembership",
+    "pk": 14,
+    "fields": {
+      "user": 1,
+      "community": 1,
+      "role": "admin",
+      "is_verified": true,
+      "joined_at": "2025-11-13T21:29:12.241Z"
+    }
+  },
+  {
     "model": "incident.incidenttype",
     "pk": 1,
     "fields": {
@@ -695,13 +638,7 @@
       "incident_status": 1,
       "title": "Robo a mano armada",
       "description": "Robo a mano armada",
-      "location": {
-        "type": "Point",
-        "coordinates": [
-          -79.045,
-          -0.217
-        ]
-      },
+      "location": "SRID=4326;POINT (-79.045 -0.217)",
       "address": "Jaime Roldos y Gran colombia",
       "is_anonymous": true,
       "severity_level": 4,
@@ -714,20 +651,14 @@
     "model": "incident.incident",
     "pk": 2,
     "fields": {
-      "created_at": "2025-11-06T08:15:30.000Z",
-      "updated_at": "2025-11-06T08:15:30.000Z",
+      "created_at": "2025-11-06T08:15:30Z",
+      "updated_at": "2025-11-06T08:15:30Z",
       "reported_by_user": 2,
       "incident_type": 2,
       "incident_status": 1,
       "title": "Grafitis en muro perimetral",
       "description": "Se encontraron grafitis en el muro perimetral de la comunidad San Martín, lado este",
-      "location": {
-        "type": "Point",
-        "coordinates": [
-          -78.5022,
-          -0.1808
-        ]
-      },
+      "location": "SRID=4326;POINT (-78.5022 -0.1808)",
       "address": "Muro perimetral este, Comunidad San Martín",
       "is_anonymous": false,
       "severity_level": 3,
@@ -740,20 +671,14 @@
     "model": "incident.incident",
     "pk": 3,
     "fields": {
-      "created_at": "2025-11-06T12:40:15.000Z",
-      "updated_at": "2025-11-06T12:40:15.000Z",
+      "created_at": "2025-11-06T12:40:15Z",
+      "updated_at": "2025-11-06T12:40:15Z",
       "reported_by_user": 3,
       "incident_type": 3,
       "incident_status": 2,
       "title": "Persona sospechosa merodeando",
       "description": "Se observó una persona desconocida merodeando cerca de las viviendas en horas de la tarde",
-      "location": {
-        "type": "Point",
-        "coordinates": [
-          -78.5021,
-          -0.1809
-        ]
-      },
+      "location": "SRID=4326;POINT (-78.5021 -0.1809)",
       "address": "Calle Principal, Comunidad San Martín",
       "is_anonymous": false,
       "severity_level": 2,
@@ -766,20 +691,14 @@
     "model": "incident.incident",
     "pk": 4,
     "fields": {
-      "created_at": "2025-11-06T15:20:45.000Z",
-      "updated_at": "2025-11-06T15:20:45.000Z",
+      "created_at": "2025-11-06T15:20:45Z",
+      "updated_at": "2025-11-06T15:20:45Z",
       "reported_by_user": 7,
       "incident_type": 4,
       "incident_status": 3,
       "title": "Choque vehicular menor",
       "description": "Accidente vehicular leve en el estacionamiento, sin heridos. Vehículos ya fueron movidos",
-      "location": {
-        "type": "Point",
-        "coordinates": [
-          -78.4982,
-          -0.1757
-        ]
-      },
+      "location": "SRID=4326;POINT (-78.4982 -0.1757)",
       "address": "Estacionamiento comunitario, Los Jardines",
       "is_anonymous": false,
       "severity_level": 2,
@@ -792,20 +711,14 @@
     "model": "incident.incident",
     "pk": 5,
     "fields": {
-      "created_at": "2025-11-06T18:30:22.000Z",
-      "updated_at": "2025-11-06T18:30:22.000Z",
+      "created_at": "2025-11-06T18:30:22Z",
+      "updated_at": "2025-11-06T18:30:22Z",
       "reported_by_user": 5,
       "incident_type": 1,
       "incident_status": 1,
       "title": "Intento de robo a vehículo",
       "description": "Se encontró un vehículo con la ventana rota y señales de intento de robo en el área de parqueo",
-      "location": {
-        "type": "Point",
-        "coordinates": [
-          -78.5023,
-          -0.1808
-        ]
-      },
+      "location": "SRID=4326;POINT (-78.5023 -0.1808)",
       "address": "Zona de parqueo B, Comunidad San Martín",
       "is_anonymous": false,
       "severity_level": 4,
@@ -818,20 +731,14 @@
     "model": "incident.incident",
     "pk": 6,
     "fields": {
-      "created_at": "2025-11-06T20:10:33.000Z",
-      "updated_at": "2025-11-06T20:10:33.000Z",
+      "created_at": "2025-11-06T20:10:33Z",
+      "updated_at": "2025-11-06T20:10:33Z",
       "reported_by_user": 8,
       "incident_type": 3,
       "incident_status": 1,
       "title": "Vehículo desconocido estacionado",
       "description": "Vehículo sin placas visible estacionado hace más de 2 horas frente al área recreativa",
-      "location": {
-        "type": "Point",
-        "coordinates": [
-          -78.4983,
-          -0.1758
-        ]
-      },
+      "location": "SRID=4326;POINT (-78.4983 -0.1758)",
       "address": "Frente al área recreativa, Los Jardines",
       "is_anonymous": true,
       "severity_level": 2,
@@ -844,20 +751,14 @@
     "model": "incident.incident",
     "pk": 7,
     "fields": {
-      "created_at": "2025-11-06T22:45:18.000Z",
-      "updated_at": "2025-11-06T22:45:18.000Z",
+      "created_at": "2025-11-06T22:45:18Z",
+      "updated_at": "2025-11-06T22:45:18Z",
       "reported_by_user": 9,
       "incident_type": 2,
       "incident_status": 1,
       "title": "Daños en área de juegos infantiles",
       "description": "Se encontraron los columpios y tobogán del área de juegos con daños intencionales",
-      "location": {
-        "type": "Point",
-        "coordinates": [
-          -78.4981,
-          -0.1759
-        ]
-      },
+      "location": "SRID=4326;POINT (-78.4981 -0.1759)",
       "address": "Área de juegos infantiles, Los Jardines",
       "is_anonymous": false,
       "severity_level": 3,

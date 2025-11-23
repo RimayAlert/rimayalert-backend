@@ -7,6 +7,7 @@
     <th scope="col">Rol</th>
     <th scope="col">Estado</th>
     <th scope="col">Fecha de unión</th>
+    <th scope="col">Acciones</th>
 {% endblock columns %}
 
 {% block rows %}
@@ -55,4 +56,18 @@
         {% endif %}
     </td>
     <td>{{ item.joined_at|date:"d/m/Y H:i" }}</td>
+    <td>
+        <form method="POST" action="{% url 'community:verify_member' item.pk %}" style="display: inline;">
+            {% csrf_token %}
+            {% if item.is_verified %}
+                <button type="submit" class="btn btn-sm btn-outline-warning" title="Desverificar miembro">
+                    <i class="fa-solid fa-circle-xmark"></i> Desverificar
+                </button>
+            {% else %}
+                <button type="submit" class="btn btn-sm btn-outline-success" title="Verificar miembro">
+                    <i class="fa-solid fa-circle-check"></i> Verificar
+                </button>
+            {% endif %}
+        </form>
+    </td>
 {% endblock %}

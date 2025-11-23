@@ -3,6 +3,7 @@ from unittest.mock import patch, MagicMock
 from django.test import TestCase
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.contrib.gis.geos import Point
 
 from core.incident.api.incident.feature.incident import CreateIncidentFeature
 from core.incident.models import IncidentType, IncidentMedia
@@ -44,8 +45,9 @@ class CreateIncidentFeatureTest(TestCase):
         self.assertEqual(incident.address, 'Av. Principal y Calle 5')
         # Verificar formato GeoJSON Point compatible con Leaflet
         self.assertIsNotNone(incident.location)
-        self.assertEqual(incident.location['type'], 'Point')
-        self.assertEqual(incident.location['coordinates'], [-77.0428, -12.0464])
+        self.assertIsInstance(incident.location, Point)
+        self.assertEqual(incident.location.x, -77.0428)
+        self.assertEqual(incident.location.y, -12.0464)
         self.assertEqual(incident.reported_by_user, self.user)
         self.assertTrue(incident.is_anonymous)
 
@@ -159,8 +161,9 @@ class CreateIncidentFeatureTest(TestCase):
         self.assertEqual(incident.address, '')
         # Verificar formato GeoJSON Point
         self.assertIsNotNone(incident.location)
-        self.assertEqual(incident.location['type'], 'Point')
-        self.assertEqual(incident.location['coordinates'], [-77.0428, -12.0464])
+        self.assertIsInstance(incident.location, Point)
+        self.assertEqual(incident.location.x, -77.0428)
+        self.assertEqual(incident.location.y, -12.0464)
 
     @patch('core.incident.api.incident.feature.incident.logger')
     def test_save_incident_logs_info_messages(self, mock_logger):
@@ -236,3 +239,95 @@ class CreateIncidentFeatureTest(TestCase):
         time_diff = timezone.now() - incident.occurred_at
         self.assertLess(time_diff.total_seconds(), 5)
 
+    def test_save_incident_creates_user_stats_if_not_exists(self):
+        """Prueba que se crea UserStats si no existe para el usuario"""
+        from core.stats.models import UserStats
+        
+        # Verificar que no existe UserStats para el usuario
+        self.assertFalse(UserStats.objects.filter(user=self.user).exists())
+        
+        feature = CreateIncidentFeature(
+            data=self.incident_data,
+            user=self.user
+        )
+        
+        incident = feature.save_incident()
+        
+        # Verificar que se creó UserStats
+        self.assertTrue(UserStats.objects.filter(user=self.user).exists())
+        stats = UserStats.objects.get(user=self.user)
+        self.assertEqual(stats.total_alerts, 1)
+        self.assertEqual(stats.total_alerts_pending, 1)
+
+    def test_save_incident_updates_existing_user_stats(self):
+        """Prueba que actualiza UserStats existente correctamente"""
+        from core.stats.models import UserStats
+        
+        # Crear UserStats previo
+        stats = UserStats.objects.create(
+            user=self.user,
+            total_alerts=5,
+            total_alerts_resolved=2,
+            total_alerts_pending=3
+        )
+        
+        feature = CreateIncidentFeature(
+            data=self.incident_data,
+            user=self.user
+        )
+        
+        incident = feature.save_incident()
+        
+        # Verificar que se actualizó correctamente
+        stats.refresh_from_db()
+        self.assertEqual(stats.total_alerts, 6)
+        self.assertEqual(stats.total_alerts_pending, 4)
+        self.assertEqual(stats.total_alerts_resolved, 2)  # No debe cambiar
+
+    def test_save_incident_increments_total_alerts(self):
+        """Prueba que total_alerts se incrementa correctamente"""
+        from core.stats.models import UserStats
+        
+        feature = CreateIncidentFeature(
+            data=self.incident_data,
+            user=self.user
+        )
+        
+        incident = feature.save_incident()
+        
+        stats = UserStats.objects.get(user=self.user)
+        self.assertEqual(stats.total_alerts, 1)
+        
+        # Crear otro incidente
+        feature2 = CreateIncidentFeature(
+            data=self.incident_data,
+            user=self.user
+        )
+        incident2 = feature2.save_incident()
+        
+        stats.refresh_from_db()
+        self.assertEqual(stats.total_alerts, 2)
+
+    def test_save_incident_increments_total_alerts_pending(self):
+        """Prueba que total_alerts_pending se incrementa correctamente"""
+        from core.stats.models import UserStats
+        
+        feature = CreateIncidentFeature(
+            data=self.incident_data,
+            user=self.user
+        )
+        
+        incident = feature.save_incident()
+        
+        stats = UserStats.objects.get(user=self.user)
+        self.assertEqual(stats.total_alerts_pending, 1)
+        
+        # Crear otro incidente
+        feature2 = CreateIncidentFeature(
+            data=self.incident_data,
+            user=self.user
+        )
+        incident2 = feature2.save_incident()
+        
+        stats.refresh_from_db()
+        self.assertEqual(stats.total_alerts_pending, 2)

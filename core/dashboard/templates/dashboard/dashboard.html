@@ -15,59 +15,7 @@
             <h2 class="h5 fw-bold mb-3">Mis Módulos</h2>
             <div class="container-fluid px-0">
                 <div class="row g-3">
-                    <!-- Módulo Usuarios -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100 border-0 shadow-sm hover-card">
-                            <div class="card-body text-center p-4 d-flex flex-column">
-                                <div class="mb-3">
-                                    <i class="fas fa-users fa-3x text-primary"></i>
-                                </div>
-                                <h5 class="card-title fw-bold mb-2">Usuarios</h5>
-                                <p class="card-text text-muted small flex-grow-1">
-                                    Administra los usuarios del sistema y sus permisos
-                                </p>
-                                <a href="#" class="btn btn-outline-primary btn-sm mt-2">
-                                    Ver más <i class="fas fa-arrow-right ms-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Módulo Comunidad -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100 border-0 shadow-sm hover-card">
-                            <div class="card-body text-center p-4 d-flex flex-column">
-                                <div class="mb-3">
-                                    <i class="fas fa-people-group fa-3x text-info"></i>
-                                </div>
-                                <h5 class="card-title fw-bold mb-2">Comunidad</h5>
-                                <p class="card-text text-muted small flex-grow-1">
-                                    Gestiona las comunidades y sus miembros
-                                </p>
-                                <a href="{% url "community:community_list" %}" class="btn btn-outline-info btn-sm mt-2">
-                                    Ver más <i class="fas fa-arrow-right ms-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Módulo Incidentes -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100 border-0 shadow-sm hover-card">
-                            <div class="card-body text-center p-4 d-flex flex-column">
-                                <div class="mb-3">
-                                    <i class="fas fa-exclamation-triangle fa-3x text-warning"></i>
-                                </div>
-                                <h5 class="card-title fw-bold mb-2">Incidentes</h5>
-                                <p class="card-text text-muted small flex-grow-1">
-                                    Monitorea y gestiona incidentes reportados
-                                </p>
-                                <a href="{% url 'incident:incident_list' %}" class="btn btn-outline-warning btn-sm mt-2">
-                                    Ver más <i class="fas fa-arrow-right ms-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    {% include "dashboard/components/modules.html" %}
                 </div>
             </div>
         </div>
@@ -78,7 +26,8 @@
 
             {% if recent_incidents %}
                 {% for incident in recent_incidents %}
-                    <div class="card border-0 shadow-sm mb-3 text-white" style="background-color: {% if incident.incident_type.color_hex %}{{ incident.incident_type.color_hex }}{% else %}#6c757d{% endif %};">
+                    <div class="card border-0 shadow-sm mb-3 text-white" style="background-color:
+                            {% if incident.incident_type.color_hex %}{{ incident.incident_type.color_hex }}{% else %}#6c757d{% endif %};">
                         <div class="card-body p-3">
                             <div class="d-flex align-items-center mb-2">
                                 <div class="text-center me-3" style="min-width: 40px;">

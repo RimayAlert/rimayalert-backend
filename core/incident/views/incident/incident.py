@@ -1,6 +1,10 @@
-from django.views.generic import ListView, DetailView
+from django.conf import settings
+from django.views.generic import ListView, DetailView, View
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
 
-from core.incident.models import Incident
+from core.incident.models import Incident, IncidentStatus
+from core.stats.models import UserStats
 from core.incident.forms import SearchIncidentForm
 
 
@@ -45,3 +49,28 @@ class IncidentDetailView(DetailView):
             'incident_status',
             'reported_by_user',
         )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['GOOGLE_MAPS_API_KEY'] = settings.GOOGLE_MAPS_API_KEY
+        return context
+
+
+class ResolveIncidentView(View):
+    def post(self, request, *args, **kwargs):
+        incident = get_object_or_404(Incident, pk=kwargs.get('pk'))
+        
+        try:
+            resolved_status = IncidentStatus.objects.get(code='003')
+        except IncidentStatus.DoesNotExist:
+            resolved_status = IncidentStatus.objects.get(name='Resuelto')
+            
+        incident.incident_status = resolved_status
+        stats, _ = UserStats.objects.get_or_create(user=incident.reported_by_user)
+        stats.total_alerts_pending = max(0, stats.total_alerts_pending - 1)
+        stats.total_alerts_resolved += 1
+        stats.save()
+        incident.save()
+        
+        messages.success(request, 'Incidente marcado como resuelto exitosamente.')
+        return redirect('incident:incident_list')

@@ -1,10 +1,11 @@
 from django.db import models
+from django.contrib.gis.db import models as gis_models
 
 
 class Community(models.Model):
     name = models.CharField(max_length=200, verbose_name="Nombre")
     description = models.TextField(blank=True, verbose_name="Descripción")
-    boundary_area = models.JSONField(blank=True, null=True, verbose_name="Área límite")
+    boundary_area = gis_models.PolygonField(srid=4326, blank=True, null=True, verbose_name="Área límite")
     postal_code = models.CharField(max_length=10, blank=True, verbose_name="Código postal")
     is_active = models.BooleanField(default=True, verbose_name="Está activa")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Creado en")

@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from core.authentication.api.register.feature.FCM_token import RegisterFCMTokenFeature
 from core.authentication.api.register.feature.register import RegisterUserProfileFeature
 from core.authentication.api.register.serializers.register import RegisterUserSerializerInput
 
@@ -14,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 class RegisterUserApiView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     def map_data_user(self, request_data):
@@ -29,7 +31,15 @@ class RegisterUserApiView(APIView):
 
     def map_data_profile(self, request_data):
         return {
-            "displayName": request_data.get("displayName")
+            "displayName": request_data.get("displayName"),
+            "latitude": request_data.get("latitude"),
+            "longitude": request_data.get("longitude"),
+        }
+
+    def map_data_token_fcm(self, request_data):
+        return {
+            "token": request_data.get("fcmToken"),
+            "deviceId": request_data.get("deviceId")
         }
 
     def post(self, request, *args, **kwargs):
@@ -42,6 +52,12 @@ class RegisterUserApiView(APIView):
                 profile_data = self.map_data_profile(request.data)
                 feature = RegisterUserProfileFeature()
                 feature.create_user_profile(user, profile_data)
+
+                fcm_data = self.map_data_token_fcm(request.data)
+                if fcm_data.get("token"):
+                    fcm_feature = RegisterFCMTokenFeature()
+                    fcm_feature.register_or_update_token(user, fcm_data)
+
                 return Response({"message": "User registered successfully"},
                                 status=status.HTTP_201_CREATED)
         except ValidationError as ve:

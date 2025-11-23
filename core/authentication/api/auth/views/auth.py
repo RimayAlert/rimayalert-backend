@@ -11,7 +11,9 @@ from core.authentication.api.auth.serializers.auth import AuthTokenSerializerInp
 
 logger = logging.getLogger(__name__)
 
+
 class CustomAuthTokenApiView(ObtainAuthToken):
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):

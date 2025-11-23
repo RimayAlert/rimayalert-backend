@@ -37,6 +37,9 @@ class CommunityMembership(models.Model):
                 name="unique_user_community_membership",
             ),
         ]
+        permissions = (
+            ("can_manage_community", "Puede gestionar la comunidad"),
+        )
 
     def __str__(self):
         return f"{self.user} - {self.community} ({self.role})"
