@@ -8,6 +8,16 @@
     }
   },
   {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "admin_community",
+      "permissions": [
+        93
+      ]
+    }
+  },
+  {
     "model": "authentication.user",
     "pk": 1,
     "fields": {
