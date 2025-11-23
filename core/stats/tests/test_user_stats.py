@@ -134,6 +134,6 @@ class TestUserStats(TestCase):
             total_alerts_resolved=3,
             total_alerts_pending=2
         )
-        self.assertEqual(self.user.userstats, user_stats)
-        self.assertEqual(self.user.userstats.total_alerts, 5)
+        self.assertEqual(self.user.u_stats_by_user, user_stats)
+        self.assertEqual(self.user.u_stats_by_user.total_alerts, 5)
 
