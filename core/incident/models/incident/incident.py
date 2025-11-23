@@ -66,7 +66,6 @@ class Incident(BaseModel):
         verbose_name_plural = "Incidentes"
 
 
-# models.py
 
 class IncidentNotification(models.Model):
     incident = models.ForeignKey(
