@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.views.generic import ListView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
@@ -8,9 +7,11 @@ from django.contrib import messages
 from core.community.forms.community import SearchMemberForm
 from core.community.models import Community
 from core.community.models import CommunityMembership
+from config.mixins.permissions.permissions import PermissionMixin
 
 
-class CommunityDetailView(LoginRequiredMixin, DetailView):
+class CommunityDetailView(PermissionMixin, DetailView):
+    permission_required = 'can_manage_community'
     model = Community
     template_name = "community/detail/community_detail.html"
     context_object_name = 'community'
@@ -30,7 +31,8 @@ class CommunityDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class CommunityMemberListView(LoginRequiredMixin, ListView):
+class CommunityMemberListView(PermissionMixin, ListView):
+    permission_required = 'can_manage_community'
     model = CommunityMembership
     template_name = "community/member_list/community_member_list.html"
     context_object_name = 'items'
@@ -68,7 +70,8 @@ class CommunityMemberListView(LoginRequiredMixin, ListView):
         return context
 
 
-class VerifyMemberView(LoginRequiredMixin, View):
+class VerifyMemberView(PermissionMixin, View):
+    permission_required = 'can_manage_community'
 
     def post(self, request, pk):
         membership = get_object_or_404(CommunityMembership, pk=pk)
