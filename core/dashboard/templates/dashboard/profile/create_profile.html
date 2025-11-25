@@ -1,0 +1,106 @@
+{% extends "layouts/base_dashboard.html" %}
+
+{% block extra_css %}
+<style>
+    .map-container {
+        height: 400px;
+        width: 100%;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fa-solid fa-user-circle"></i> Completa tu Perfil</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fa-solid fa-info-circle"></i> Por favor completa tu información de perfil y selecciona
+                        tu ubicación en el mapa.
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="{{ form.alias_name.id_for_label }}" class="form-label">Alias</label>
+                            {{ form.alias_name }}
+                            {% if form.alias_name.errors %}
+                            <div class="text-danger">{{ form.alias_name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.bio.id_for_label }}" class="form-label">Biografía</label>
+                            {{ form.bio }}
+                            {% if form.bio.errors %}
+                            <div class="text-danger">{{ form.bio.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        {{ form.latitude }}
+                        {{ form.longitude }}
+
+                        <div class="mb-3">
+                            <label class="form-label">Ubicación (Haz clic en el mapa)</label>
+                            <div id="profileMap" class="map-container"></div>
+                            <small class="text-muted">Haz clic en el mapa para establecer tu ubicación</small>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fa-solid fa-save"></i> Guardar Perfil
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if GOOGLE_MAPS_API_KEY %}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=marker&callback=initMap"
+    async defer></script>
+<script>
+    let profileMap;
+    let profileMarker;
+
+    function initMap() {
+        const defaultPos = { lat: -0.180653, lng: -78.467834 };
+        profileMap = new google.maps.Map(document.getElementById("profileMap"), {
+            center: defaultPos,
+            zoom: 13,
+        });
+
+        profileMap.addListener("click", (e) => {
+            placeMarker(e.latLng);
+        });
+    }
+
+    function placeMarker(latLng) {
+        if (profileMarker) {
+            profileMarker.setMap(null);
+        }
+        profileMarker = new google.maps.Marker({
+            position: latLng,
+            map: profileMap,
+        });
+        profileMap.panTo(latLng);
+
+        document.querySelector('input[name="latitude"]').value = latLng.lat();
+        document.querySelector('input[name="longitude"]').value = latLng.lng();
+    }
+
+    window.initMap = initMap;
+</script>
+{% endif %}
+{% endblock extra_js %}
