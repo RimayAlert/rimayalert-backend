@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from config.mixins.permissions.permissions import PermissionMixin
 from core.incident.models import Incident
 from core.community.models import Community
+from core.community.models.community_membership.community_membership import CommunityMembership
 from core.authentication.models import UserProfile
 from core.authentication.forms.user_profile.user_profile_form import UserProfileForm
 from core.community.forms.community.community_form import CommunityForm
@@ -87,6 +88,14 @@ class CreateCommunityView(PermissionMixin, FormView):
         return context
 
     def form_valid(self, form):
-        form.save()
-        messages.success(self.request, 'Comunidad creada exitosamente.')
+        community = form.save()
+        
+        CommunityMembership.objects.create(
+            user=self.request.user,
+            community=community,
+            role='admin',
+            is_verified=True
+        )
+        
+        messages.success(self.request, 'Comunidad creada exitosamente y has sido asignado como administrador.')
         return super().form_valid(form)
