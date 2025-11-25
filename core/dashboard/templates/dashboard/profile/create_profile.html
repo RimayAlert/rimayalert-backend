@@ -71,10 +71,27 @@
 
     function initMap() {
         const defaultPos = { lat: -0.180653, lng: -78.467834 };
+
         profileMap = new google.maps.Map(document.getElementById("profileMap"), {
             center: defaultPos,
             zoom: 13,
         });
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const userPos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    profileMap.setCenter(userPos);
+                    profileMap.setZoom(15);
+                },
+                (error) => {
+                    console.log('Geolocation error:', error.message);
+                }
+            );
+        }
 
         profileMap.addListener("click", (e) => {
             placeMarker(e.latLng);
