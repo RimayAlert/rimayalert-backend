@@ -35,11 +35,13 @@ class ResolveIncidentViewTest(TestCase):
             code='ROBO_01'
         )
 
+        # Estado inicial del incidente
         cls.status_reported = IncidentStatus.objects.create(
             name='Reportado',
             code='001'
         )
 
+        # Estado correcto para "resuelto"
         cls.status_resolved = IncidentStatus.objects.create(
             name='Resuelto',
             code='003'
@@ -48,8 +50,8 @@ class ResolveIncidentViewTest(TestCase):
     def setUp(self):
         """Configuración antes de cada prueba."""
         self.client = Client()
-        
-        # Crear incidente de prueba
+
+        # Crear incidente base
         self.incident = Incident.objects.create(
             reported_by_user=self.user,
             incident_type=self.incident_type,
@@ -60,8 +62,8 @@ class ResolveIncidentViewTest(TestCase):
             address='Calle Principal 123',
             occurred_at=timezone.now()
         )
-        
-        # Crear UserStats para el usuario
+
+        # Crear UserStats iniciales
         self.stats = UserStats.objects.create(
             user=self.user,
             total_alerts=5,
@@ -69,119 +71,115 @@ class ResolveIncidentViewTest(TestCase):
             total_alerts_pending=3
         )
 
+    # ---------------------------------------------------------
+    # TESTS PRINCIPALES
+    # ---------------------------------------------------------
+
     def test_resolve_incident_success(self):
-        """Prueba que el incidente se marca como resuelto exitosamente."""
+        """El incidente debe actualizarse al estado 'Resuelto'."""
         url = reverse('incident:resolve_incident', kwargs={'pk': self.incident.pk})
         response = self.client.post(url)
-        
-        # Verificar redirección
+
         self.assertEqual(response.status_code, 302)
-        
-        # Verificar que el incidente cambió de estado
+
         self.incident.refresh_from_db()
         self.assertEqual(self.incident.incident_status, self.status_resolved)
 
     def test_resolve_incident_updates_stats(self):
-        """Prueba que las estadísticas se actualizan correctamente."""
+        """Las estadísticas deben actualizarse correctamente."""
         url = reverse('incident:resolve_incident', kwargs={'pk': self.incident.pk})
-        response = self.client.post(url)
-        
-        # Verificar que las estadísticas se actualizaron
+        self.client.post(url)
+
         self.stats.refresh_from_db()
         self.assertEqual(self.stats.total_alerts_pending, 2)  # 3 - 1
         self.assertEqual(self.stats.total_alerts_resolved, 3)  # 2 + 1
-        self.assertEqual(self.stats.total_alerts, 5)  # No debe cambiar
+        self.assertEqual(self.stats.total_alerts, 5)
 
     def test_resolve_incident_redirects_to_list(self):
-        """Prueba que redirige a la lista de incidentes después de resolver."""
+        """Después de resolver debe redirigir a la lista."""
         url = reverse('incident:resolve_incident', kwargs={'pk': self.incident.pk})
         response = self.client.post(url)
-        
+
         self.assertRedirects(response, reverse('incident:incident_list'))
 
     def test_resolve_incident_shows_success_message(self):
-        """Prueba que muestra un mensaje de éxito."""
+        """Debe mostrar mensaje de éxito."""
         url = reverse('incident:resolve_incident', kwargs={'pk': self.incident.pk})
         response = self.client.post(url, follow=True)
-        
+
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'Incidente marcado como resuelto exitosamente.')
 
+    # ---------------------------------------------------------
+    # ERRORES Y CASOS ESPECIALES
+    # ---------------------------------------------------------
+
     def test_resolve_incident_not_found(self):
-        """Prueba que retorna 404 para incidente no existente."""
+        """Debe devolver 404 si el incidente no existe."""
         url = reverse('incident:resolve_incident', kwargs={'pk': 9999})
         response = self.client.post(url)
-        
         self.assertEqual(response.status_code, 404)
 
     def test_resolve_incident_with_code_003(self):
-        """Prueba que usa el estado con código '003' si existe."""
+        """Debe usar el estado con código '003' si existe."""
         url = reverse('incident:resolve_incident', kwargs={'pk': self.incident.pk})
-        response = self.client.post(url)
-        
+        self.client.post(url)
+
         self.incident.refresh_from_db()
         self.assertEqual(self.incident.incident_status.code, '003')
         self.assertEqual(self.incident.incident_status.name, 'Resuelto')
 
     def test_resolve_incident_with_name_resuelto_fallback(self):
-        """Prueba que usa el estado con nombre 'Resuelto' como fallback."""
-        # Eliminar el estado con código '003'
+        """Si no existe código '003', debe usar nombre 'Resuelto'."""
+        # Eliminar estado con código 003
         self.status_resolved.delete()
-        
-        # Crear estado con nombre 'Resuelto' pero sin código '003'
-        status_resuelto = IncidentStatus.objects.create(
+
+        # Crear otro estado con nombre "Resuelto"
+        fallback_status = IncidentStatus.objects.create(
             name='Resuelto',
-            code='RESOLVED_01'
+            code='XYZ_01'
         )
-        
+
         url = reverse('incident:resolve_incident', kwargs={'pk': self.incident.pk})
-        response = self.client.post(url)
-        
+        self.client.post(url)
+
         self.incident.refresh_from_db()
-        self.assertEqual(self.incident.incident_status.name, 'Resuelto')
-        self.assertEqual(self.incident.incident_status, status_resuelto)
+        self.assertEqual(self.incident.incident_status, fallback_status)
 
     def test_resolve_incident_creates_stats_if_not_exists(self):
-        """Prueba que crea UserStats si no existe para el usuario."""
-        # Eliminar stats existente
+        """Debe crear stats si no existen."""
         self.stats.delete()
-        
+
         url = reverse('incident:resolve_incident', kwargs={'pk': self.incident.pk})
-        response = self.client.post(url)
-        
-        # Verificar que se creó UserStats
-        self.assertTrue(UserStats.objects.filter(user=self.user).exists())
+        self.client.post(url)
+
         stats = UserStats.objects.get(user=self.user)
-        # Como no había stats previos, pending debería ser 0 (no puede ser negativo)
-        self.assertEqual(stats.total_alerts_pending, 0)  # max(0, 0 - 1) = 0
-        self.assertEqual(stats.total_alerts_resolved, 1)  # 0 + 1
+
+        self.assertEqual(stats.total_alerts_pending, 0)
+        self.assertEqual(stats.total_alerts_resolved, 1)
 
     def test_resolve_incident_only_accepts_post(self):
-        """Prueba que solo acepta método POST."""
+        """GET debe ser rechazado con 405."""
         url = reverse('incident:resolve_incident', kwargs={'pk': self.incident.pk})
-        
-        # GET no debería funcionar
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 405)  # Method Not Allowed
+
+        self.assertEqual(response.status_code, 405)
 
     def test_resolve_incident_multiple_times(self):
-        """Prueba resolver el mismo incidente múltiples veces."""
+        """Resolver múltiples veces debe afectar stats correctamente."""
         url = reverse('incident:resolve_incident', kwargs={'pk': self.incident.pk})
-        
-        # Primera resolución
-        response1 = self.client.post(url)
-        self.assertEqual(response1.status_code, 302)
-        
+
+        # 1ra resolución
+        self.client.post(url)
         self.stats.refresh_from_db()
-        pending_after_first = self.stats.total_alerts_pending
-        resolved_after_first = self.stats.total_alerts_resolved
-        
-        # Segunda resolución
-        response2 = self.client.post(url)
-        self.assertEqual(response2.status_code, 302)
-        
+
+        first_pending = self.stats.total_alerts_pending
+        first_resolved = self.stats.total_alerts_resolved
+
+        # 2da resolución
+        self.client.post(url)
         self.stats.refresh_from_db()
-        # Las estadísticas deberían cambiar nuevamente (pero pending no puede ser negativo)
-        self.assertEqual(self.stats.total_alerts_pending, max(0, pending_after_first - 1))
-        self.assertEqual(self.stats.total_alerts_resolved, resolved_after_first + 1)
+
+        self.assertEqual(self.stats.total_alerts_pending, max(0, first_pending - 1))
+        self.assertEqual(self.stats.total_alerts_resolved, first_resolved + 1)
