@@ -14,7 +14,7 @@ class UpdateFCMTokenApiViewTest(APITestCase):
         self.password = secrets.token_urlsafe(16)
         self.user = User.objects.create_user(
             username='tester',
-            password='...etc...',
+            password=secrets.token_urlsafe(32),
             email='tester@test.com',
             dni=str(uuid4())
         )
