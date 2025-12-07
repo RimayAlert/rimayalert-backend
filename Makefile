@@ -2,6 +2,8 @@ REQ_DIR = requirements
 PROD = $(REQ_DIR)/production.txt
 DEV = $(REQ_DIR)/development.txt
 DOCKER_IMAGE = CodeCrafters/app
+.PHONY: gis-up gis-down gis-restart gis-logs
+
 
 # ✅ Install dependencies
 install-prod:
@@ -68,5 +70,16 @@ reset-db:
 	make update_database
 	@echo "✨ Base de datos limpia y migraciones aplicadas."
 
+gis-up:
+	docker compose -f docker-compose.gis.yml -p rimay_gis up -d
 
+gis-down:
+	docker compose -f docker-compose.gis.yml -p rimay_gis down
+
+gis-restart:
+	docker compose -f docker-compose.gis.yml -p rimay_gis down
+	docker compose -f docker-compose.gis.yml -p rimay_gis up -d
+
+gis-logs:
+	docker compose -f docker-compose.gis.yml -p rimay_gis logs -f
 
