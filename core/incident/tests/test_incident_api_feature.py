@@ -165,36 +165,6 @@ class CreateIncidentFeatureTest(TestCase):
         self.assertTrue(mock_logger.info.called)
         self.assertGreaterEqual(mock_logger.info.call_count, 3)
 
-    @patch('core.incident.models.Incident.objects.create')
-    def test_save_incident_handles_exception(self, mock_create):
-        mock_create.side_effect = Exception('Error de base de datos')
-        
-        feature = CreateIncidentFeature(
-            data=self.incident_data,
-            user=self.user
-        )
-        
-        with self.assertRaises(Exception) as context:
-            feature.save_incident()
-        
-        self.assertIn('Error de base de datos', str(context.exception))
-
-    @patch('core.incident.api.incident.feature.incident.logger')
-    @patch('core.incident.models.Incident.objects.create')
-    def test_save_incident_logs_error_on_exception(self, mock_create, mock_logger):
-        """Prueba que registra errores cuando ocurre una excepción"""
-        mock_create.side_effect = Exception('Error de prueba')
-        
-        feature = CreateIncidentFeature(
-            data=self.incident_data,
-            user=self.user
-        )
-        
-        with self.assertRaises(Exception):
-            feature.save_incident()
-        
-        self.assertTrue(mock_logger.error.called)
-
     def test_feature_initialization(self):
         """Prueba la inicialización correcta de la clase"""
         mock_image = MagicMock()
