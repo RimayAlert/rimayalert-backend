@@ -12,10 +12,8 @@ User = get_user_model()
 
 
 class CreateIncidentFeatureTest(TestCase):
-    """Pruebas unitarias para CreateIncidentFeature"""
 
     def setUp(self):
-        """Configuración inicial para las pruebas"""
         self.user = User.objects.create_user(
             username='testuser',
             email='test@example.com',
@@ -43,7 +41,6 @@ class CreateIncidentFeatureTest(TestCase):
         self.assertEqual(incident.title, 'Robo')
         self.assertEqual(incident.description, 'Choque en la intersección')
         self.assertEqual(incident.address, 'Av. Principal y Calle 5')
-        # Verificar formato GeoJSON Point compatible con Leaflet
         self.assertIsNotNone(incident.location)
         self.assertIsInstance(incident.location, Point)
         self.assertEqual(incident.location.x, -77.0428)
@@ -67,7 +64,6 @@ class CreateIncidentFeatureTest(TestCase):
 
     def test_save_incident_reuses_existing_incident_type(self):
         """Prueba que reutiliza un tipo de incidente existente"""
-        # Crear tipo de incidente previamente
         existing_type = IncidentType.objects.create(
             name='Robo',
             code='robo',
@@ -81,8 +77,6 @@ class CreateIncidentFeatureTest(TestCase):
         
         initial_count = IncidentType.objects.count()
         incident = feature.save_incident()
-        
-        # No debe crear un nuevo tipo
         self.assertEqual(IncidentType.objects.count(), initial_count)
         self.assertEqual(incident.incident_type.id, existing_type.id)
 
@@ -104,8 +98,6 @@ class CreateIncidentFeatureTest(TestCase):
         """Prueba que guarda la imagen asociada al incidente"""
         mock_image = MagicMock()
         mock_image.name = 'test_image.jpg'
-        
-        # Configurar el mock para IncidentMedia
         mock_media = MagicMock()
         mock_media.file.name = 'test_image.jpg'
         mock_media.media_type = 'image'
@@ -118,8 +110,6 @@ class CreateIncidentFeatureTest(TestCase):
         )
         
         incident = feature.save_incident()
-        
-        # Verificar que se intentó crear el registro de media
         mock_media_create.assert_called_once()
         call_kwargs = mock_media_create.call_args[1]
         self.assertEqual(call_kwargs['incident'], incident)
@@ -136,12 +126,10 @@ class CreateIncidentFeatureTest(TestCase):
         
         incident = feature.save_incident()
         
-        # No debe haber media asociada
         media_count = IncidentMedia.objects.filter(incident=incident).count()
         self.assertEqual(media_count, 0)
 
     def test_save_incident_with_minimal_data(self):
-        """Prueba que funciona con datos mínimos"""
         minimal_data = {
             'type': 'Robo',
             'latitude': -12.0464,
@@ -159,7 +147,6 @@ class CreateIncidentFeatureTest(TestCase):
         self.assertEqual(incident.title, 'Robo')
         self.assertEqual(incident.description, '')
         self.assertEqual(incident.address, '')
-        # Verificar formato GeoJSON Point
         self.assertIsNotNone(incident.location)
         self.assertIsInstance(incident.location, Point)
         self.assertEqual(incident.location.x, -77.0428)
@@ -175,13 +162,11 @@ class CreateIncidentFeatureTest(TestCase):
         
         incident = feature.save_incident()
         
-        # Verificar que se llamaron logs
         self.assertTrue(mock_logger.info.called)
         self.assertGreaterEqual(mock_logger.info.call_count, 3)
 
     @patch('core.incident.models.Incident.objects.create')
     def test_save_incident_handles_exception(self, mock_create):
-        """Prueba el manejo de excepciones durante la creación"""
         mock_create.side_effect = Exception('Error de base de datos')
         
         feature = CreateIncidentFeature(
@@ -208,7 +193,6 @@ class CreateIncidentFeatureTest(TestCase):
         with self.assertRaises(Exception):
             feature.save_incident()
         
-        # Verificar que se llamó logger.error
         self.assertTrue(mock_logger.error.called)
 
     def test_feature_initialization(self):
@@ -235,15 +219,12 @@ class CreateIncidentFeatureTest(TestCase):
         incident = feature.save_incident()
         
         self.assertIsNotNone(incident.occurred_at)
-        # Verificar que la fecha es reciente (dentro de los últimos 5 segundos)
         time_diff = timezone.now() - incident.occurred_at
         self.assertLess(time_diff.total_seconds(), 5)
 
     def test_save_incident_creates_user_stats_if_not_exists(self):
         """Prueba que se crea UserStats si no existe para el usuario"""
         from core.stats.models import UserStats
-        
-        # Verificar que no existe UserStats para el usuario
         self.assertFalse(UserStats.objects.filter(user=self.user).exists())
         
         feature = CreateIncidentFeature(
@@ -253,7 +234,6 @@ class CreateIncidentFeatureTest(TestCase):
         
         incident = feature.save_incident()
         
-        # Verificar que se creó UserStats
         self.assertTrue(UserStats.objects.filter(user=self.user).exists())
         stats = UserStats.objects.get(user=self.user)
         self.assertEqual(stats.total_alerts, 1)
@@ -262,8 +242,6 @@ class CreateIncidentFeatureTest(TestCase):
     def test_save_incident_updates_existing_user_stats(self):
         """Prueba que actualiza UserStats existente correctamente"""
         from core.stats.models import UserStats
-        
-        # Crear UserStats previo
         stats = UserStats.objects.create(
             user=self.user,
             total_alerts=5,
@@ -277,8 +255,6 @@ class CreateIncidentFeatureTest(TestCase):
         )
         
         incident = feature.save_incident()
-        
-        # Verificar que se actualizó correctamente
         stats.refresh_from_db()
         self.assertEqual(stats.total_alerts, 6)
         self.assertEqual(stats.total_alerts_pending, 4)
@@ -298,7 +274,6 @@ class CreateIncidentFeatureTest(TestCase):
         stats = UserStats.objects.get(user=self.user)
         self.assertEqual(stats.total_alerts, 1)
         
-        # Crear otro incidente
         feature2 = CreateIncidentFeature(
             data=self.incident_data,
             user=self.user
@@ -322,7 +297,6 @@ class CreateIncidentFeatureTest(TestCase):
         stats = UserStats.objects.get(user=self.user)
         self.assertEqual(stats.total_alerts_pending, 1)
         
-        # Crear otro incidente
         feature2 = CreateIncidentFeature(
             data=self.incident_data,
             user=self.user

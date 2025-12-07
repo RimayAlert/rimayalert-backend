@@ -54,7 +54,6 @@ class CommunityViewsTests(TestCase):
         url = reverse('community:community_detail')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        # Verificar contexto
         self.assertIsNotNone(response.context)
         community = response.context.get('community')
         self.assertIsNotNone(community)
@@ -85,25 +84,21 @@ class CommunityViewsTests(TestCase):
         self.client.login(username='member_user', password=self.password_member)
         url = reverse('community:verify_member', args=[self.member_membership.id])
         response = self.client.post(url)
-        # redirige sin cambiar verificación
         self.member_membership.refresh_from_db()
         self.assertFalse(self.member_membership.is_verified)
 
     def test_admin_can_toggle_verification(self):
         self.client.login(username='admin_user', password=self.password_admin)
         url = reverse('community:verify_member', args=[self.member_membership.id])
-        # Toggle to verified
         response = self.client.post(url)
         self.assertEqual(response.status_code, 302)
         self.member_membership.refresh_from_db()
         self.assertTrue(self.member_membership.is_verified)
-        # Toggle back to unverified
         response = self.client.post(url)
         self.member_membership.refresh_from_db()
         self.assertFalse(self.member_membership.is_verified)
 
     def test_verify_member_other_community_blocked(self):
-        # Crear otra comunidad y membresía objetivo
         other_polygon = Polygon((
             (-20.0, -20.0),
             (-20.0, 20.0),
