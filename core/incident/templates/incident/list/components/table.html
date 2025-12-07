@@ -30,7 +30,7 @@
     <a href="{% url 'incident:incident_detail' item.pk %}" class="btn btn-sm btn-outline-primary" title="Ver detalle">
         <i class="fa-solid fa-eye"></i>
     </a>
-    {% if item.incident_status.code != 'RESOL_01' %}
+    {% if item.incident_status.code != '003' %}
     <form action="{% url 'incident:resolve_incident' item.pk %}" method="post" class="d-inline"
         onsubmit="return confirm('¿Estás seguro de marcar este incidente como resuelto?');">
         {% csrf_token %}

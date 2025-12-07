@@ -7,7 +7,6 @@ from core.community.models.community.community import Community
 class CommunityMembership(models.Model):
     ROLE_CHOICES = [
         ("member", "Miembro"),
-        ("moderator", "Moderador"),
         ("admin", "Administrador"),
     ]
 

@@ -167,12 +167,17 @@
                             <a href="{% url 'incident:incident_list' %}" class="btn btn-secondary">
                                 <i class="fa-solid fa-arrow-left"></i> Volver
                             </a>
-                            <button type="button" class="btn btn-warning">
-                                <i class="fa-solid fa-edit"></i> Editar
-                            </button>
-                            <button type="button" class="btn btn-danger">
-                                <i class="fa-solid fa-trash"></i> Eliminar
-                            </button>
+                            {% if incident.incident_status.code != '003' %}
+                                <form action="{% url 'incident:resolve_incident' incident.pk %}" method="post"
+                                      class="d-inline"
+                                      onsubmit="return confirm('¿Estás seguro de marcar este incidente como resuelto?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-success"
+                                            title="Marcar como resuelto">
+                                        <i class="fa-solid fa-check"></i>Resolver
+                                    </button>
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

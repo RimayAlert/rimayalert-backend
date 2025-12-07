@@ -69,5 +69,5 @@ class CreateIncidentFeature:
             return incident
 
         except Exception as e:
-            logger.error(f"Error al crear incidente: {str(e)}", exc_info=True)
+            logger.error(f"Error al crear incidente: {str(e)}")
             raise

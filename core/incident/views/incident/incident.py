@@ -6,9 +6,10 @@ from django.contrib import messages
 from core.incident.models import Incident, IncidentStatus
 from core.stats.models import UserStats
 from core.incident.forms import SearchIncidentForm
+from config.mixins.permissions.permissions import PermissionMixin
 
-
-class IncidentListView(ListView):
+class IncidentListView(PermissionMixin, ListView):
+    permission_required = 'can_manage_community'
     model = Incident
     template_name = "incident/list/incident_list.html"
     context_object_name = 'items'
@@ -38,7 +39,8 @@ class IncidentListView(ListView):
         return context
 
 
-class IncidentDetailView(DetailView):
+class IncidentDetailView(PermissionMixin, DetailView):
+    permission_required = 'can_manage_community'
     model = Incident
     template_name = "incident/detail/incident_detail.html"
     context_object_name = 'incident'
@@ -56,7 +58,9 @@ class IncidentDetailView(DetailView):
         return context
 
 
-class ResolveIncidentView(View):
+class ResolveIncidentView(PermissionMixin, View):
+    permission_required = 'can_manage_community'
+
     def post(self, request, *args, **kwargs):
         incident = get_object_or_404(Incident, pk=kwargs.get('pk'))
         

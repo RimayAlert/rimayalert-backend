@@ -1,0 +1,164 @@
+{% extends "layouts/base_dashboard.html" %}
+
+{% block extra_css %}
+<style>
+    .map-container {
+        height: 500px;
+        width: 100%;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="fa-solid fa-users"></i> Crear Comunidad</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fa-solid fa-info-circle"></i> No se ha detectado ninguna comunidad. Por favor crea una
+                        y define su área límite dibujando un polígono en el mapa.
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {% include "components/field/input.html" with field=form.name icon="fa-solid fa-building" %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                {% include "components/field/input.html" with field=form.postal_code icon="fa-solid fa-location-dot" %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {% include "components/field/textarea.html" with field=form.description %}
+                        </div>
+
+                        {{ form.boundary_area_json }}
+                        {% if form.boundary_area_json.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.boundary_area_json.errors }}
+                        </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Área Límite (Dibuja un polígono)
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div id="communityMap" class="map-container"></div>
+                            <small class="text-muted">Usa la herramienta de dibujo para crear el área límite de la
+                                comunidad</small>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fa-solid fa-save"></i> Crear Comunidad
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if GOOGLE_MAPS_API_KEY %}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=drawing&callback=initMap"
+    async defer></script>
+<script>
+    let communityMap;
+    let drawingManager;
+    let currentPolygon = null;
+
+    function initMap() {
+        const defaultPos = { lat: -0.180653, lng: -78.467834 };
+
+        communityMap = new google.maps.Map(document.getElementById("communityMap"), {
+            center: defaultPos,
+            zoom: 13,
+        });
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const userPos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    communityMap.setCenter(userPos);
+                    communityMap.setZoom(15);
+                },
+                (error) => {
+                    console.log('Geolocation error:', error.message);
+                }
+            );
+        }
+
+        drawingManager = new google.maps.drawing.DrawingManager({
+            drawingMode: google.maps.drawing.OverlayType.POLYGON,
+            drawingControl: true,
+            drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_CENTER,
+                drawingModes: [google.maps.drawing.OverlayType.POLYGON],
+            },
+            polygonOptions: {
+                fillColor: "#198754",
+                fillOpacity: 0.3,
+                strokeWeight: 2,
+                clickable: false,
+                editable: true,
+                zIndex: 1,
+            },
+        });
+        drawingManager.setMap(communityMap);
+
+        google.maps.event.addListener(drawingManager, 'overlaycomplete', function (event) {
+            if (currentPolygon) {
+                currentPolygon.setMap(null);
+            }
+            currentPolygon = event.overlay;
+            drawingManager.setDrawingMode(null);
+
+            updateBoundaryField();
+
+            currentPolygon.getPath().addListener('set_at', updateBoundaryField);
+            currentPolygon.getPath().addListener('insert_at', updateBoundaryField);
+        });
+    }
+
+    function updateBoundaryField() {
+        if (!currentPolygon) return;
+
+        const path = currentPolygon.getPath();
+        let coords = [];
+        for (let i = 0; i < path.getLength(); i++) {
+            const xy = path.getAt(i);
+            coords.push([xy.lng(), xy.lat()]);
+        }
+        if (coords.length > 0) {
+            coords.push(coords[0]);
+        }
+
+        const geoJson = {
+            "type": "Polygon",
+            "coordinates": [coords]
+        };
+
+        document.querySelector('input[name="boundary_area_json"]').value = JSON.stringify(geoJson);
+    }
+
+    window.initMap = initMap;
+</script>
+{% endif %}
+{% endblock extra_js %}

@@ -17,7 +17,6 @@ class RegisterIncidentApiViewTest(TestCase):
     """Pruebas unitarias para RegisterIncidentApiView"""
 
     def setUp(self):
-        """Configuración inicial para las pruebas"""
         self.factory = APIRequestFactory()
         self.view = RegisterIncidentApiView.as_view()
 
@@ -36,7 +35,6 @@ class RegisterIncidentApiViewTest(TestCase):
         }
 
     def test_post_creates_incident_successfully(self):
-        """Prueba que se crea un incidente exitosamente"""
         data = {
             'data': json.dumps(self.incident_data)
         }
@@ -73,7 +71,6 @@ class RegisterIncidentApiViewTest(TestCase):
             response = self.view(request)
 
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-            # Verificar que se pasó la imagen al feature
             mock_feature.assert_called_once()
             call_kwargs = mock_feature.call_args[1]
             self.assertIsNotNone(call_kwargs['image_file'])
@@ -127,7 +124,6 @@ class RegisterIncidentApiViewTest(TestCase):
 
         response = self.view(request)
 
-        # Verificar que se llamó logger.info
         self.assertTrue(mock_logger.info.called)
 
     @patch('core.incident.api.incident.views.incident.logger')
@@ -152,7 +148,6 @@ class RegisterIncidentApiViewTest(TestCase):
 
             response = self.view(request)
 
-            # Verificar que se registró la información de la imagen
             info_calls = [call[0][0] for call in mock_logger.info.call_args_list]
             self.assertTrue(any('Imagen recibida' in str(call) for call in info_calls))
 
@@ -168,7 +163,6 @@ class RegisterIncidentApiViewTest(TestCase):
 
         response = self.view(request)
 
-        # Verificar que se registró que no hay imagen
         info_calls = [call[0][0] for call in mock_logger.info.call_args_list]
         self.assertTrue(any('No se recibió imagen' in str(call) for call in info_calls))
 
@@ -205,14 +199,12 @@ class RegisterIncidentApiViewTest(TestCase):
 
         response = self.view(request)
 
-        # Verificar que se llamó logger.error
         self.assertTrue(mock_logger.error.called)
 
     def test_view_requires_authentication(self):
         """Prueba que la vista requiere autenticación"""
         view_instance = RegisterIncidentApiView()
 
-        # Verificar que tiene la permission class
         from rest_framework.permissions import IsAuthenticated
         self.assertIn(IsAuthenticated, view_instance.permission_classes)
 
@@ -232,7 +224,6 @@ class RegisterIncidentApiViewTest(TestCase):
 
         response = self.view(request)
 
-        # Verificar que CreateIncidentFeature fue llamado con los parámetros correctos
         mock_feature.assert_called_once()
         call_kwargs = mock_feature.call_args[1]
         self.assertEqual(call_kwargs['data'], self.incident_data)
@@ -251,7 +242,6 @@ class RegisterIncidentApiViewTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        # Verificar que existe un incidente con ese ID
         incident_id = response.data['incident_id']
         incident = Incident.objects.get(id=incident_id)
         if incident.location:
@@ -265,7 +255,6 @@ class RegisterIncidentApiViewTest(TestCase):
 
         response = self.view(request)
 
-        # Verificar que se llamó logger.warning
         self.assertTrue(mock_logger.warning.called)
         warning_message = mock_logger.warning.call_args[0][0]
         self.assertIn('No se recibió campo', warning_message)

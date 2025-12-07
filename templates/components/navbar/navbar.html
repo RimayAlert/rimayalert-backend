@@ -21,28 +21,19 @@
                     aria-label="Opciones de usuario">
                     <li>
                         <h6 class="dropdown-header">
-                            <span class="fw-bold d-block">Usuario Administrador</span>
-                            <span class="small text-muted d-block">admin@rimay.com</span>
+                            <span class="fw-bold d-block">Hi, {{ user.username }}</span>
+                            <span class="small text-muted d-block">{{ user.email }}</span>
                         </h6>
                     </li>
                     <li>
                         <hr class="dropdown-divider my-1">
                     </li>
-                    <li><a class="dropdown-item py-2" href="#" aria-label="Ver mi perfil">
-                        <i class="fas fa-user me-2 text-primary" aria-hidden="true"></i>Mi Perfil
-                    </a></li>
-                    <li><a class="dropdown-item py-2" href="#" aria-label="Ir a configuración">
-                        <i class="fas fa-cog me-2 text-secondary" aria-hidden="true"></i>Configuración
-                    </a></li>
-                    <li><a class="dropdown-item py-2" href="#" aria-label="Obtener ayuda">
-                        <i class="fas fa-question-circle me-2 text-info" aria-hidden="true"></i>Ayuda
-                    </a></li>
                     <li>
-                        <hr class="dropdown-divider my-1">
+                        <a class="dropdown-item py-2 text-danger"
+                           href="{% url 'authentication:logout' %}" aria-label="Cerrar sesión">
+                            <i class="fas fa-sign-out-alt me-2" aria-hidden="true"></i>Cerrar sesión
+                        </a>
                     </li>
-                    <li><a class="dropdown-item py-2 text-danger" href="#" aria-label="Cerrar sesión">
-                        <i class="fas fa-sign-out-alt me-2" aria-hidden="true"></i>Cerrar sesión
-                    </a></li>
                 </ul>
             </li>
         </ul>
