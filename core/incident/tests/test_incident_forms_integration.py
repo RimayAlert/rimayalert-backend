@@ -1,10 +1,3 @@
-"""
-Tests de integración para los formularios y vistas de incidentes.
-
-Este módulo proporciona pruebas adicionales para la integración entre
-formularios y vistas, así como pruebas de cobertura de código.
-"""
-
 import secrets
 from django.test import TestCase, Client
 from django.urls import reverse
@@ -27,7 +20,6 @@ class IncidentViewIntegrationTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        """Configuración inicial de datos para las pruebas."""
         password = secrets.token_urlsafe(32)
         cls.user = User.objects.create_user(
             username='integrationuser',
@@ -49,7 +41,6 @@ class IncidentViewIntegrationTest(TestCase):
 
         now = timezone.now()
 
-        # Crear múltiples incidentes para pruebas de paginación y filtrado
         for i in range(5):
             Incident.objects.create(
                 reported_by_user=cls.user,
@@ -74,7 +65,6 @@ class IncidentViewIntegrationTest(TestCase):
         response = self.client.get(self.list_url)
         form = response.context['search_form']
 
-        # Verifica que el formulario está en el contexto
         self.assertIsNotNone(form)
         self.assertIsInstance(form, SearchIncidentForm)
 
@@ -86,7 +76,6 @@ class IncidentViewIntegrationTest(TestCase):
         )
         form = response.context['search_form']
 
-        # Verifica que el formulario mantiene el valor del filtro (como string)
         self.assertEqual(form['type'].value(), str(self.incident_type_1.id))
 
     def test_integration_multiple_filters_applied(self):
@@ -98,7 +87,6 @@ class IncidentViewIntegrationTest(TestCase):
 
         items = list(response.context['items'])
 
-        # Verifica que solo se muestran incidentes que coinciden con ambos filtros
         self.assertTrue(all(
             item.incident_type == self.incident_type_1 and
             item.incident_status == self.status_pending
@@ -111,7 +99,6 @@ class IncidentViewIntegrationTest(TestCase):
             'type': 'invalid_type_id'
         })
 
-        # La vista debe manejar datos inválidos graciosamente
         self.assertEqual(response.status_code, 200)
 
     def test_integration_detail_view_accessible_from_list(self):
@@ -119,10 +106,7 @@ class IncidentViewIntegrationTest(TestCase):
         response = self.client.get(self.list_url)
         items = response.context['items']
 
-        # Obtener el primer incidente de la lista
         incident = list(items)[0]
-
-        # Intentar acceder a su vista de detalle
         detail_url = reverse('incident:incident_detail', kwargs={'pk': incident.pk})
         detail_response = self.client.get(detail_url)
 
@@ -184,7 +168,6 @@ class IncidentFormValidationTest(TestCase):
     def test_form_empty_labels(self):
         """Verifica que los campos tienen etiquetas vacías opcionales."""
         form = SearchIncidentForm()
-        # Verificar que los campos aceptan valores vacíos (no son requeridos)
         self.assertFalse(form.fields['type'].required)
         self.assertFalse(form.fields['status'].required)
 
@@ -211,7 +194,6 @@ class IncidentViewQueryOptimizationTest(TestCase):
         cls.incident_type = IncidentType.objects.create(name='Fraude', code='FRAU_01')
         cls.status = IncidentStatus.objects.create(name='Investigando', code='INVES_01')
 
-        # Crear múltiples incidentes
         now = timezone.now()
         for i in range(10):
             Incident.objects.create(
@@ -232,10 +214,8 @@ class IncidentViewQueryOptimizationTest(TestCase):
         """Verifica que la vista de lista usa prefetch_related."""
         url = reverse('incident:incident_list')
 
-        # El número de queries debe ser constante sin importar el número de incidentes
         with self.assertNumQueries(6):
             response = self.client.get(url)
-            # Iterar sobre todos los items para forzar la evaluación del queryset
             list(response.context['items'])
 
     def test_detail_view_uses_select_related(self):
@@ -245,7 +225,6 @@ class IncidentViewQueryOptimizationTest(TestCase):
 
         with self.assertNumQueries(1):
             response = self.client.get(url)
-            # Acceder a todas las relaciones
             incident_obj = response.context['incident']
             _ = incident_obj.reported_by_user.username
             _ = incident_obj.incident_type.name
@@ -372,7 +351,6 @@ class IncidentRelationshipsTest(TestCase):
             occurred_at=timezone.now()
         )
 
-        # Intentar eliminar el tipo de incidente debe fallar
         with self.assertRaises(Exception):
             self.type1.delete()
 
@@ -388,7 +366,6 @@ class IncidentRelationshipsTest(TestCase):
             occurred_at=timezone.now()
         )
 
-        # Intentar eliminar el estado de incidente debe fallar
         with self.assertRaises(Exception):
             self.status1.delete()
 
@@ -406,15 +383,11 @@ class IncidentRelationshipsTest(TestCase):
 
         incident_id = incident.id
 
-        # Eliminar el usuario
         self.user1.delete()
-
-        # Verificar que el incidente fue eliminado
         self.assertFalse(Incident.objects.filter(id=incident_id).exists())
 
     def test_community_cascade_delete_incidents(self):
         """Verifica que al eliminar una comunidad se eliminan sus incidentes."""
-        # Crear un incidente sin referencia a comunidad
         incident = Incident.objects.create(
             reported_by_user=self.user1,
             incident_type=self.type1,
@@ -426,6 +399,4 @@ class IncidentRelationshipsTest(TestCase):
         )
 
         incident_id = incident.id
-
-        # Verificar que el incidente existe
         self.assertTrue(Incident.objects.filter(id=incident_id).exists())

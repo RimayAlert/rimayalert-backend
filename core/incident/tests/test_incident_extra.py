@@ -109,7 +109,7 @@ class TestFCMNotificationUtils:
         assert result["success"] == 0
         assert result["failed"] == 1
         assert result["invalid_tokens"] == ["BADTOKEN"]
-        assert token.is_active is False  # Se desactivó el token
+        assert token.is_active is False
 
     # -------------------------------
     # Caso 5: Error general
