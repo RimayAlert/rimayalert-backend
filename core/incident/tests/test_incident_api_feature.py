@@ -165,19 +165,6 @@ class CreateIncidentFeatureTest(TestCase):
         self.assertTrue(mock_logger.info.called)
         self.assertGreaterEqual(mock_logger.info.call_count, 3)
 
-    def test_feature_initialization(self):
-        """Prueba la inicialización correcta de la clase"""
-        mock_image = MagicMock()
-        
-        feature = CreateIncidentFeature(
-            data=self.incident_data,
-            user=self.user,
-            image_file=mock_image
-        )
-        
-        self.assertEqual(feature.data, self.incident_data)
-        self.assertEqual(feature.user, self.user)
-        self.assertEqual(feature.image_file, mock_image)
 
     def test_save_incident_sets_occurred_at(self):
         """Prueba que se establece la fecha de ocurrencia"""

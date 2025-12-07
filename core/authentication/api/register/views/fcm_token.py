@@ -37,7 +37,7 @@ class UpdateFCMTokenApiView(APIView):
                 }, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
-            logger.error(f"Error al actualizar token FCM: {str(e)}", exc_info=True)
+            logger.error(f"Error al actualizar token FCM: {str(e)}")
             return Response({
                 'error': 'Error interno del servidor'
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
