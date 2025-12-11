@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 
 
 @login_required
+@require_POST
 def LogoutView(request):
     logout(request)
     return redirect('authentication:login')
