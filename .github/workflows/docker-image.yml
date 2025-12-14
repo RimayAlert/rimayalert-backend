@@ -1,0 +1,23 @@
+name: RimayAlert — Docker Image
+
+on:
+  workflow_run:
+    workflows: [ "Django CI" ]
+    types:
+      - completed
+
+jobs:
+  docker:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      (github.event.workflow_run.head_branch == 'main' ||
+       github.event.workflow_run.head_branch == 'develop')
+
+    uses: freddyandreszambrano/Platform-CI/.github/workflows/web/django-docker-image.yml@v1
+    with:
+      docker_image: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+      dockerfile: Dockerfile.rimayalert
+
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
