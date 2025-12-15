@@ -15,7 +15,7 @@ jobs:
 
     uses: freddyandreszambrano/Platform-CI/.github/workflows/web/django-docker-image.yml@v1
     with:
-      docker_image: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+      docker_image: ${{ vars.DOCKER_IMAGE }}
       dockerfile: Dockerfile.rimayalert
 
     secrets:
